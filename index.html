@@ -1,0 +1,2079 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ResolveFlow AI — Logistics Support Intelligence Platform</title>
+<meta name="description" content="AI-powered unified customer complaint and communication platform for modern logistics companies.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+:root{--bg:#020617;--sf:#0F172A;--c:#111827;--bo:#1F2937;--p:#3B82F6;--a:#8B5CF6;--s:#22C55E;--w:#F59E0B;--d:#EF4444;--t:#E2E8F0;--t2:#94A3B8;--sw:240px;--sc:62px;--r:12px;--r2:8px}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--t);min-height:100vh;overflow-x:hidden}
+a{text-decoration:none;color:inherit}
+button{font-family:'Inter',sans-serif}
+input,textarea,select{font-family:'Inter',sans-serif}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulseGlow{0%,100%{box-shadow:0 0 0 0 rgba(59,130,246,.35)}50%{box-shadow:0 0 0 7px rgba(59,130,246,0)}}
+@keyframes breathe{0%,100%{transform:scale(1);opacity:.7}50%{transform:scale(1.5);opacity:1}}
+@keyframes gradientShift{0%{background-position:0% 50%}100%{background-position:200% 50%}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+@keyframes blink{0%,80%,100%{opacity:.2}40%{opacity:1}}
+@keyframes slideLeft{from{opacity:0;transform:translateX(-10px)}to{opacity:1;transform:translateX(0)}}
+@keyframes dashFlow{to{stroke-dashoffset:-24}}
+@keyframes spin{to{transform:rotate(360deg)}}
+/* APP SHELL */
+.app-shell{display:none;height:100vh;overflow:hidden}
+.app-shell.active{display:flex}
+/* SIDEBAR */
+.sidebar{width:var(--sw);min-width:var(--sw);background:var(--sf);border-right:1px solid var(--bo);height:100vh;display:flex;flex-direction:column;transition:width .3s cubic-bezier(.4,0,.2,1),min-width .3s cubic-bezier(.4,0,.2,1);overflow:hidden;z-index:10;flex-shrink:0}
+.sidebar.collapsed{width:var(--sc);min-width:var(--sc)}
+.sb-logo{padding:16px 14px;display:flex;align-items:center;gap:9px;border-bottom:1px solid var(--bo);flex-shrink:0;height:60px}
+.sb-logo-ic{width:30px;height:30px;background:linear-gradient(135deg,var(--p),var(--a));border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#fff;font-size:13px;font-weight:900;letter-spacing:-.5px}
+.sb-logo-txt{font-weight:800;font-size:14.5px;white-space:nowrap;overflow:hidden;color:var(--t)}
+.sb-logo-txt span{color:var(--p)}
+.sb-nav{flex:1;padding:10px 8px;overflow-y:auto;overflow-x:hidden}
+.sb-nav::-webkit-scrollbar{width:0}
+.nav-item{display:flex;align-items:center;gap:9px;padding:9px 10px;border-radius:var(--r2);cursor:pointer;transition:all .18s;margin-bottom:1px;white-space:nowrap;color:var(--t2);font-size:13px;font-weight:500;border-left:2.5px solid transparent;user-select:none;position:relative}
+.nav-item:hover{background:rgba(255,255,255,.05);color:var(--t)}
+.nav-item.active{background:rgba(59,130,246,.1);color:var(--p);border-left-color:var(--p)}
+.nav-icon{width:15px;height:15px;flex-shrink:0;stroke-width:1.8}
+.nav-label{overflow:hidden;font-size:13px}
+.nav-badge{background:var(--d);color:#fff;font-size:10px;font-weight:700;padding:1px 5px;border-radius:8px;margin-left:auto;flex-shrink:0}
+.sb-bottom{padding:10px 8px;border-top:1px solid var(--bo);flex-shrink:0}
+.sb-toggle{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:var(--r2);cursor:pointer;color:var(--t2);font-size:13px;font-weight:500;transition:all .18s;border:none;background:none;width:100%;white-space:nowrap}
+.sb-toggle:hover{background:rgba(255,255,255,.05);color:var(--t)}
+/* MAIN */
+.main-content{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
+/* NAVBAR */
+.navbar{height:60px;background:var(--sf);border-bottom:1px solid var(--bo);display:flex;align-items:center;padding:0 20px;gap:10px;flex-shrink:0;position:relative}
+.nb-search{position:relative;flex:1;max-width:280px}
+.nb-search input{width:100%;background:var(--bg);border:1px solid var(--bo);border-radius:var(--r2);padding:7px 12px 7px 32px;color:var(--t);font-size:13px;outline:none;transition:border-color .2s}
+.nb-search input:focus{border-color:var(--p)}
+.nb-search-ic{position:absolute;left:9px;top:50%;transform:translateY(-50%);color:var(--t2);width:14px;height:14px}
+.nb-actions{display:flex;align-items:center;gap:8px;margin-left:auto}
+.nb-btn{display:flex;align-items:center;gap:6px;padding:6px 14px;border-radius:var(--r2);border:none;cursor:pointer;font-size:13px;font-weight:600;transition:all .2s}
+.btn-primary{background:var(--p);color:#fff}
+.btn-primary:hover{background:#2563EB;transform:translateY(-1px)}
+.nb-icon-btn{position:relative;background:none;border:none;cursor:pointer;color:var(--t2);width:34px;height:34px;display:flex;align-items:center;justify-content:center;border-radius:var(--r2);transition:all .18s}
+.nb-icon-btn:hover{background:rgba(255,255,255,.06);color:var(--t)}
+.nb-badge{position:absolute;top:2px;right:2px;background:var(--d);color:#fff;font-size:9px;font-weight:800;border-radius:10px;padding:1px 4px;border:1.5px solid var(--sf);display:none;line-height:1}
+.nb-badge.has-notifs{display:inline-flex;align-items:center;justify-content:center}
+.lang-btn{padding:4px 10px;background:rgba(255,255,255,.04);border:1px solid var(--bo);border-radius:6px;cursor:pointer;font-size:11px;color:var(--t2);transition:all .18s;font-weight:600}
+.lang-btn:hover{color:var(--t);border-color:var(--p)}
+.user-av{width:32px;height:32px;background:linear-gradient(135deg,var(--p),var(--a));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;cursor:pointer;color:#fff;flex-shrink:0}
+/* NOTIFICATION DROPDOWN */
+.notif-drop{position:absolute;right:16px;top:56px;width:300px;background:var(--sf);border:1px solid var(--bo);border-radius:var(--r);box-shadow:0 12px 36px rgba(0,0,0,.5);z-index:200;display:none;overflow:hidden}
+.notif-drop.open{display:block;animation:fadeIn .2s ease}
+.nd-hdr{padding:12px 16px;border-bottom:1px solid var(--bo);font-size:13px;font-weight:700;display:flex;justify-content:space-between;align-items:center}
+.nd-item{padding:11px 16px;border-bottom:1px solid rgba(255,255,255,.04);display:flex;gap:10px;cursor:pointer}
+.nd-item:hover{background:rgba(255,255,255,.03)}
+.nd-item:last-child{border-bottom:none}
+.nd-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;margin-top:5px}
+.nd-txt{font-size:12.5px;color:var(--t);line-height:1.4}
+.nd-time{font-size:11px;color:var(--t2);margin-top:3px}
+/* SEARCH DROPDOWN */
+.search-drop{position:absolute;left:0;top:45px;width:100%;background:var(--sf);border:1px solid var(--bo);border-radius:var(--r);box-shadow:0 12px 36px rgba(0,0,0,.5);z-index:200;display:none;max-height:350px;overflow-y:auto}
+.search-drop.open{display:block;animation:fadeIn .2s ease}
+.sr-item{padding:11px 16px;border-bottom:1px solid rgba(255,255,255,.04);cursor:pointer;display:flex;flex-direction:column;gap:3px}
+.sr-item:hover{background:rgba(255,255,255,.03)}
+.sr-item:last-child{border-bottom:none}
+.sr-title{font-size:13px;font-weight:600;color:var(--t)}
+.sr-desc{font-size:11.5px;color:var(--t2)}
+/* PAGES */
+.page-content{flex:1;overflow-y:auto;overflow-x:hidden}
+.page-content::-webkit-scrollbar{width:4px}
+.page-content::-webkit-scrollbar-thumb{background:var(--bo);border-radius:2px}
+.page{display:none;padding:28px 32px;animation:fadeIn .3s ease}
+.page.active{display:block}
+.page-hdr{margin-bottom:24px}
+.page-hdr h1{font-size:21px;font-weight:700;color:var(--t)}
+.page-hdr p{color:var(--t2);font-size:13px;margin-top:4px}
+/* SPECIAL PAGE LAYOUTS */
+.inbox-page{display:none}
+.inbox-page.active{display:grid;grid-template-columns:272px 1fr 296px;height:calc(100vh - 60px)}
+.cmd-page{display:none}
+.cmd-page.active{display:flex;flex-direction:column;height:calc(100vh - 60px);overflow:hidden;padding:20px 24px;gap:14px}
+/* CARDS */
+.card{background:var(--c);border:1px solid var(--bo);border-radius:var(--r);padding:24px;transition:transform .2s,box-shadow .2s}
+.card:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.3)}
+/* KPI */
+.kpi-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:20px}
+.kpi-card{background:var(--c);border:1px solid var(--bo);border-radius:var(--r);padding:18px;transition:all .2s;cursor:default}
+.kpi-card:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.3);border-color:rgba(59,130,246,.2)}
+.kpi-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px}
+.kpi-ic{width:34px;height:34px;border-radius:var(--r2);display:flex;align-items:center;justify-content:center}
+.kpi-trend{font-size:11px;font-weight:700;padding:2px 7px;border-radius:8px;display:flex;align-items:center;gap:2px}
+.kpi-val{font-size:26px;font-weight:800;color:var(--t);line-height:1}
+.kpi-lbl{font-size:12px;color:var(--t2);margin-top:5px}
+/* CHARTS */
+.charts-row{display:grid;grid-template-columns:2fr 1fr 1fr;gap:12px;margin-bottom:20px}
+.chart-card{background:var(--c);border:1px solid var(--bo);border-radius:var(--r);padding:18px}
+.chart-ttl{font-size:13px;font-weight:600;color:var(--t);margin-bottom:14px}
+/* BADGES */
+.badge{display:inline-flex;align-items:center;padding:2px 9px;border-radius:16px;font-size:11px;font-weight:600;white-space:nowrap}
+.b-s{background:rgba(34,197,94,.12);color:var(--s)}
+.b-w{background:rgba(245,158,11,.12);color:var(--w)}
+.b-d{background:rgba(239,68,68,.12);color:var(--d)}
+.b-p{background:rgba(59,130,246,.12);color:var(--p)}
+.b-a{background:rgba(139,92,246,.12);color:var(--a)}
+.b-n{background:rgba(148,163,184,.1);color:var(--t2)}
+/* TABLE */
+.tbl-wrap{background:var(--c);border:1px solid var(--bo);border-radius:var(--r);overflow:hidden}
+.tbl-bar{display:flex;align-items:center;gap:10px;padding:13px 18px;border-bottom:1px solid var(--bo)}
+.tbl-srch{display:flex;align-items:center;gap:7px;background:var(--bg);border:1px solid var(--bo);border-radius:var(--r2);padding:6px 11px;flex:1;max-width:260px}
+.tbl-srch input{background:none;border:none;outline:none;color:var(--t);font-size:13px;width:100%}
+.tbl{width:100%;border-collapse:collapse}
+.tbl th{padding:10px 14px;text-align:left;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--t2);border-bottom:1px solid var(--bo);cursor:pointer;white-space:nowrap;user-select:none}
+.tbl th:hover{color:var(--t)}
+.tbl td{padding:12px 14px;font-size:13px;color:var(--t);border-bottom:1px solid rgba(255,255,255,.04);white-space:nowrap}
+.tbl tr:last-child td{border-bottom:none}
+.tbl tr:hover td{background:rgba(255,255,255,.02)}
+/* INBOX */
+.inbox-list{border-right:1px solid var(--bo);overflow-y:auto;background:var(--sf)}
+.inbox-list::-webkit-scrollbar{width:0}
+.inbox-list-hdr{padding:14px;border-bottom:1px solid var(--bo);display:flex;justify-content:space-between;align-items:center;flex-shrink:0}
+.inbox-list-hdr h3{font-size:14px;font-weight:700}
+.conv-item{padding:12px 13px;border-bottom:1px solid rgba(255,255,255,.04);cursor:pointer;transition:background .15s;display:flex;gap:9px}
+.conv-item:hover{background:rgba(255,255,255,.03)}
+.conv-item.active{background:rgba(59,130,246,.07);border-left:2px solid var(--p)}
+.conv-av{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;color:#fff}
+.conv-info{flex:1;min-width:0}
+.conv-nr{display:flex;justify-content:space-between;align-items:center}
+.conv-name{font-size:13px;font-weight:600;color:var(--t)}
+.conv-time{font-size:10px;color:var(--t2)}
+.conv-prev{font-size:12px;color:var(--t2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px}
+.conv-meta{display:flex;align-items:center;gap:5px;margin-top:4px}
+.ch-badge{font-size:10px;font-weight:600;padding:1px 6px;border-radius:4px}
+.sla-h{background:rgba(239,68,68,.15);color:var(--d)}
+.sla-m{background:rgba(245,158,11,.15);color:var(--w)}
+.sla-l{background:rgba(34,197,94,.15);color:var(--s)}
+.unread-dot{background:var(--p);color:#fff;font-size:10px;font-weight:700;padding:1px 5px;border-radius:8px;margin-left:auto}
+.chat-area{display:flex;flex-direction:column;background:var(--bg)}
+.chat-hdr{padding:12px 18px;border-bottom:1px solid var(--bo);display:flex;align-items:center;gap:10px;background:var(--sf);flex-shrink:0}
+.chat-hdr-av{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff}
+.chat-hdr-name{font-size:14px;font-weight:700}
+.chat-hdr-sub{font-size:11px;color:var(--t2)}
+.chat-msgs{flex:1;overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:12px}
+.chat-msgs::-webkit-scrollbar{width:3px}
+.chat-msgs::-webkit-scrollbar-thumb{background:var(--bo);border-radius:2px}
+.msg-row{display:flex;flex-direction:column;max-width:70%}
+.msg-row.agent{align-self:flex-end;align-items:flex-end}
+.msg-row.customer{align-self:flex-start}
+.msg-bub{padding:9px 13px;border-radius:11px;font-size:13px;line-height:1.5}
+.msg-cust{background:var(--c);border:1px solid var(--bo);border-radius:11px 11px 11px 3px}
+.msg-agnt{background:var(--p);color:#fff;border-radius:11px 11px 3px 11px}
+.msg-ai-bub{background:rgba(139,92,246,.09);border:1px solid rgba(139,92,246,.22);border-radius:10px;font-size:12px;color:var(--a);padding:10px 13px;align-self:stretch;margin:4px 0}
+.msg-time{font-size:10px;color:var(--t2);margin-top:3px}
+.chat-input-bar{padding:12px 16px;border-top:1px solid var(--bo);display:flex;gap:9px;background:var(--sf);flex-shrink:0}
+.chat-inp{flex:1;background:var(--bg);border:1px solid var(--bo);border-radius:10px;padding:9px 13px;color:var(--t);font-size:13px;outline:none;resize:none;transition:border-color .2s;height:38px;line-height:1.4}
+.chat-inp:focus{border-color:var(--p)}
+.send-btn{background:var(--p);border:none;border-radius:var(--r2);padding:9px 14px;cursor:pointer;color:#fff;transition:all .2s;font-weight:600;font-size:13px;display:flex;align-items:center;gap:5px}
+.send-btn:hover{background:#2563EB}
+.ctx-panel{border-left:1px solid var(--bo);overflow-y:auto;background:var(--sf)}
+.ctx-panel::-webkit-scrollbar{width:0}
+.ctx-sec{padding:13px 14px;border-bottom:1px solid var(--bo)}
+.ctx-ttl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--t2);margin-bottom:9px;display:flex;align-items:center;gap:5px}
+.ctx-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px;font-size:12.5px}
+.ctx-lbl{color:var(--t2)}
+.ctx-val{color:var(--t);font-weight:500;font-size:12.5px;text-align:right;max-width:55%}
+.ai-sug{background:rgba(139,92,246,.09);border:1px solid rgba(139,92,246,.22);border-radius:10px;padding:11px;font-size:12.5px;color:var(--t);line-height:1.6}
+.ai-sug-lbl{font-size:10px;font-weight:700;text-transform:uppercase;color:var(--a);margin-bottom:6px;letter-spacing:.05em;display:flex;align-items:center;gap:5px}
+.sla-box{text-align:center;padding:13px;border-radius:10px;border:1px solid rgba(239,68,68,.25);background:rgba(239,68,68,.06)}
+.sla-big{font-size:24px;font-weight:800;color:var(--d);font-variant-numeric:tabular-nums}
+.sla-lbl-sm{font-size:11px;color:var(--t2);margin-top:3px}
+.act-btns{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.act-btn{padding:8px;border-radius:8px;border:none;cursor:pointer;font-size:13px;font-weight:600;transition:all .2s;width:100%}
+/* ALERTS FEED */
+.alert-feed{display:flex;flex-direction:column}
+.af-item{display:flex;align-items:flex-start;gap:10px;padding:11px 0;border-bottom:1px solid rgba(255,255,255,.04)}
+.af-item:last-child{border-bottom:none}
+.af-item.new-item{animation:slideLeft .4s ease}
+.af-ic{width:28px;height:28px;border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.af-body{flex:1}
+.af-title{font-size:13px;font-weight:500;color:var(--t)}
+.af-desc{font-size:11.5px;color:var(--t2);margin-top:2px}
+.af-time{font-size:11px;color:var(--t2);white-space:nowrap;margin-top:2px}
+/* AUTOMATION */
+.wf-card{background:var(--c);border:1px solid var(--bo);border-radius:var(--r);padding:20px;margin-bottom:12px}
+.wf-hdr{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px}
+.wf-meta{flex:1;min-width:0}.wf-title{font-size:14px;font-weight:700}
+
+.wf-desc{font-size:12px;color:var(--t2);margin-top:3px}
+.wf-flow{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-bottom:14px}
+.fn{display:flex;align-items:center;gap:6px;border:1px solid var(--bo);border-radius:var(--r2);padding:7px 11px;font-size:12.5px;font-weight:500}
+.fn-t{border-color:rgba(59,130,246,.4);background:rgba(59,130,246,.07);color:var(--p)}
+.fn-c{border-color:rgba(245,158,11,.4);background:rgba(245,158,11,.07);color:var(--w)}
+.fn-a{border-color:rgba(34,197,94,.4);background:rgba(34,197,94,.07);color:var(--s)}
+.farrow{color:var(--t2);font-size:13px}
+.tog-wrap{position:relative;width:38px;height:21px;flex-shrink:0}
+.tog-wrap input{opacity:0;width:0;height:0;position:absolute}
+.tog-sl{position:absolute;inset:0;background:var(--bo);border-radius:21px;cursor:pointer;transition:.3s}
+.tog-sl:before{content:'';position:absolute;height:15px;width:15px;left:3px;bottom:3px;background:#fff;border-radius:50%;transition:.3s}
+input:checked+.tog-sl{background:var(--p)}
+input:checked+.tog-sl:before{transform:translateX(17px)}
+.wf-stats{display:flex;gap:18px;padding-top:12px;border-top:1px solid var(--bo)}
+.wf-stat{font-size:12px;color:var(--t2)}
+.wf-stat span{color:var(--t);font-weight:600}
+/* KNOWLEDGE BASE */
+.kb-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.kb-card{background:var(--c);border:1px solid var(--bo);border-radius:var(--r);padding:20px;transition:all .2s;cursor:pointer}
+.kb-card:hover{transform:translateY(-2px);border-color:rgba(59,130,246,.3);box-shadow:0 8px 24px rgba(0,0,0,.28)}
+.kb-cat{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--p);margin-bottom:7px}
+.kb-title{font-size:13.5px;font-weight:700;color:var(--t);margin-bottom:6px;line-height:1.4}
+.kb-exc{font-size:12px;color:var(--t2);line-height:1.6;margin-bottom:13px}
+.kb-meta{display:flex;align-items:center;justify-content:space-between;font-size:12px;color:var(--t2)}
+.kb-send{background:rgba(59,130,246,.1);border:1px solid rgba(59,130,246,.25);color:var(--p);border-radius:6px;padding:3px 10px;font-size:11px;font-weight:600;cursor:pointer;transition:all .18s}
+.kb-send:hover{background:var(--p);color:#fff}
+/* AI INSIGHTS */
+.ins-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px}
+.ins-card{background:var(--c);border:1px solid var(--bo);border-radius:var(--r);padding:18px}
+.ins-ttl{font-size:13.5px;font-weight:700;color:var(--t);margin-bottom:5px}
+.ins-sub{font-size:12.5px;color:var(--t2);margin-bottom:13px;line-height:1.5}
+.ai-rec-box{background:rgba(139,92,246,.07);border:1px solid rgba(139,92,246,.22);border-radius:10px;padding:13px;margin-bottom:10px}
+.ai-rec-hdr{display:flex;align-items:center;gap:7px;font-size:11px;font-weight:700;color:var(--a);text-transform:uppercase;letter-spacing:.05em;margin-bottom:7px}
+.ai-rec-txt{font-size:13px;color:var(--t);line-height:1.6}
+.route-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.04)}
+.route-row:last-child{border-bottom:none}
+/* COMMAND CENTER */
+.cmd-toprow{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;flex-shrink:0}
+.cmd-stat{background:var(--c);border:1px solid var(--bo);border-radius:var(--r2);padding:12px 16px;display:flex;align-items:center;gap:10px}
+.cmd-stat-val{font-size:22px;font-weight:800;color:var(--t)}
+.cmd-stat-lbl{font-size:11px;color:var(--t2);margin-top:2px}
+.cmd-main-row{display:grid;grid-template-columns:1fr 300px;gap:12px;flex:1;min-height:0}
+.cmd-map-wrap{background:var(--c);border:1px solid var(--bo);border-radius:var(--r);overflow:hidden;position:relative;display:flex;flex-direction:column}
+.cmd-map-svg-wrap{flex:1;min-height:0;overflow:hidden;display:flex}
+.cmd-map-topbar{padding:10px 14px;border-bottom:1px solid var(--bo);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.cmd-map-topbar h3{font-size:13px;font-weight:700}
+.cmd-right{display:flex;flex-direction:column;gap:10px;overflow-y:auto;min-height:0}
+.cmd-right::-webkit-scrollbar{width:0}
+.cmd-panel{background:var(--c);border:1px solid var(--bo);border-radius:var(--r);padding:13px}
+.cmd-panel-ttl{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--t2);margin-bottom:10px;display:flex;align-items:center;justify-content:space-between}
+.live-dot{width:6px;height:6px;background:var(--s);border-radius:50%;animation:breathe 1.8s infinite}
+.anom-item{display:flex;gap:8px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.04)}
+.anom-item:last-child{border-bottom:none}
+.anom-ic{width:26px;height:26px;border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.anom-txt{font-size:12px;color:var(--t);line-height:1.4}
+.anom-route{font-size:11px;color:var(--t2);margin-top:2px}
+.lfi{display:flex;gap:7px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.04)}
+.lfi:last-child{border-bottom:none}
+.lfi-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;margin-top:5px}
+.lfi-body{flex:1}
+.lfi-txt{font-size:12px;color:var(--t);line-height:1.4}
+.lfi-time{font-size:10px;color:var(--t2);margin-top:2px}
+/* SVG MAP */
+/* SVG MAP & COMMAND CENTER */
+@keyframes hubGlow{0%{transform:scale(1);opacity:.8}100%{transform:scale(2.5);opacity:0}}
+@keyframes routeDash{from{stroke-dashoffset:100}to{stroke-dashoffset:0}}
+.hub-pulse{animation:breathe 2s infinite;transform-origin:center}
+.hub-pulse-anim{animation:hubGlow 2s ease-out infinite;transform-origin:center;transform-box:fill-box}
+.hub-pulse-fast{animation:hubGlow 1s ease-out infinite;transform-origin:center;transform-box:fill-box}
+.route-line{stroke-dasharray:6,4;animation:dashFlow 25s linear infinite}
+.route-traffic{stroke-dasharray:4,40;animation:routeDash 3s linear infinite}
+.hub-group{cursor:pointer;transition:all .2s}
+.hub-group:hover circle:not(.hub-pulse-anim){stroke:#fff;stroke-width:2.5px;filter:drop-shadow(0 0 8px rgba(255,255,255,.8))}
+.map-tt{position:absolute;background:rgba(15,23,42,.95);border:1px solid rgba(255,255,255,.1);backdrop-filter:blur(8px);border-radius:10px;padding:12px;width:180px;pointer-events:none;opacity:0;transition:opacity .2s;font-family:'Inter',sans-serif;z-index:50;box-shadow:0 12px 30px rgba(0,0,0,.5);transform:translate(-50%,-110%)}
+.map-tt.show{opacity:1}
+.tt-city{font-size:14px;font-weight:800;color:#fff;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between}
+.tt-row{display:flex;justify-content:space-between;font-size:12px;margin-bottom:5px}
+.tt-lbl{color:var(--t2);font-weight:500}
+.tt-val{color:var(--t);font-weight:700}
+/* SETTINGS */
+.settings-layout{display:grid;grid-template-columns:190px 1fr;gap:20px}
+.s-nav-item{padding:8px 12px;border-radius:var(--r2);cursor:pointer;font-size:13px;font-weight:500;color:var(--t2);transition:all .15s;margin-bottom:2px}
+.s-nav-item:hover{background:rgba(255,255,255,.04);color:var(--t)}
+.s-nav-item.active{background:rgba(59,130,246,.1);color:var(--p)}
+.form-row{margin-bottom:16px}
+.form-lbl{font-size:13px;font-weight:500;color:var(--t2);margin-bottom:5px;display:block}
+.form-inp{width:100%;background:var(--bg);border:1px solid var(--bo);border-radius:var(--r2);padding:9px 12px;color:var(--t);font-size:13px;outline:none;transition:border-color .2s}
+.form-inp:focus{border-color:var(--p)}
+.form-2col{display:grid;grid-template-columns:1fr 1fr;gap:13px}
+.notif-row{display:flex;justify-content:space-between;align-items:center;padding:11px 0;border-bottom:1px solid rgba(255,255,255,.04)}
+.notif-row:last-child{border-bottom:none}
+.notif-row-lbl{font-size:13px;font-weight:500;color:var(--t)}
+.notif-row-sub{font-size:12px;color:var(--t2);margin-top:2px}
+/* CHATBOT */
+.cb-btn{position:fixed;bottom:24px;right:24px;width:50px;height:50px;background:linear-gradient(135deg,var(--p),var(--a));border-radius:50%;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(59,130,246,.4);z-index:1000;transition:all .2s;color:#fff;animation:pulseGlow 3s infinite}
+.cb-btn:hover{transform:scale(1.08)}
+.cb-panel{position:fixed;bottom:86px;right:24px;width:350px;background:var(--sf);border:1px solid var(--bo);border-radius:14px;box-shadow:0 16px 48px rgba(0,0,0,.55);z-index:999;display:none;flex-direction:column;overflow:hidden}
+.cb-panel.open{display:flex;animation:fadeIn .25s ease}
+.cb-hdr{padding:13px 16px;border-bottom:1px solid var(--bo);display:flex;align-items:center;gap:9px}
+.cb-av{width:32px;height:32px;background:linear-gradient(135deg,var(--p),var(--a));border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;font-weight:800}
+.cb-name{font-size:13.5px;font-weight:700}
+.cb-status{font-size:11px;color:var(--s);display:flex;align-items:center;gap:4px}
+.cb-close{margin-left:auto;background:none;border:none;cursor:pointer;color:var(--t2);transition:color .2s;display:flex;align-items:center;justify-content:center}
+.cb-close:hover{color:var(--t)}
+.cb-msgs{height:300px;overflow-y:auto;padding:13px;display:flex;flex-direction:column;gap:9px}
+.cb-msgs::-webkit-scrollbar{width:0}
+.bot-msg{background:var(--c);border:1px solid var(--bo);border-radius:10px 10px 10px 2px;padding:9px 11px;font-size:13px;line-height:1.5;max-width:88%;color:var(--t)}
+.user-msg{background:var(--p);color:#fff;border-radius:10px 10px 2px 10px;padding:9px 11px;font-size:13px;line-height:1.5;max-width:88%;align-self:flex-end}
+.typing-ind{display:flex;align-items:center;gap:3px;padding:9px 11px;background:var(--c);border:1px solid var(--bo);border-radius:10px;width:fit-content}
+.ty-dot{width:5px;height:5px;border-radius:50%;background:var(--t2);animation:blink 1.4s infinite}
+.ty-dot:nth-child(2){animation-delay:.2s}
+.ty-dot:nth-child(3){animation-delay:.4s}
+.cb-inp-bar{padding:10px 13px;border-top:1px solid var(--bo);display:flex;gap:7px}
+.cb-inp{flex:1;background:var(--bg);border:1px solid var(--bo);border-radius:var(--r2);padding:7px 11px;color:var(--t);font-size:13px;outline:none}
+.cb-inp:focus{border-color:var(--p)}
+.cb-send{background:var(--p);border:none;border-radius:var(--r2);padding:7px 11px;cursor:pointer;color:#fff;display:flex;align-items:center;justify-content:center}
+/* LANDING */
+#landing{display:flex;flex-direction:column;min-height:100vh}
+#landing.hidden{display:none}
+.l-nav{display:flex;align-items:center;justify-content:space-between;padding:16px 48px;position:sticky;top:0;background:rgba(2,6,23,.92);backdrop-filter:blur(14px);border-bottom:1px solid rgba(255,255,255,.04);z-index:50}
+.l-logo{display:flex;align-items:center;gap:9px;font-size:16px;font-weight:800;color:var(--t)}
+.l-logo-ic{width:32px;height:32px;background:linear-gradient(135deg,var(--p),var(--a));border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;color:#fff}
+.l-nav-links{display:flex;gap:26px}
+.l-nav-links a{color:var(--t2);font-size:14px;font-weight:500;transition:color .18s}
+.l-nav-links a:hover{color:var(--t)}
+.l-nav-btns{display:flex;gap:8px}
+.l-btn{padding:7px 17px;border-radius:var(--r2);font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;border:none}
+.l-btn-ghost{background:transparent;border:1px solid var(--bo);color:var(--t2)}
+.l-btn-ghost:hover{color:var(--t);border-color:var(--p)}
+.l-btn-prim{background:var(--p);color:#fff}
+.l-btn-prim:hover{background:#2563EB;transform:translateY(-1px)}
+.hero{padding:76px 48px 56px;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;width:700px;height:500px;background:radial-gradient(circle,rgba(59,130,246,.11) 0%,transparent 65%);top:-80px;left:50%;transform:translateX(-50%);pointer-events:none}
+.hero-badge{display:inline-flex;align-items:center;gap:7px;background:rgba(59,130,246,.09);border:1px solid rgba(59,130,246,.28);border-radius:100px;padding:5px 14px;font-size:12px;font-weight:600;color:var(--p);margin-bottom:22px}
+.hero-badge-dot{width:5px;height:5px;background:var(--s);border-radius:50%;animation:breathe 2s infinite}
+.hero-h1{font-size:54px;font-weight:900;line-height:1.1;letter-spacing:-2px;margin-bottom:22px}
+.grad-txt{background:linear-gradient(90deg,#38bdf8,#818cf8,#c084fc,#38bdf8);background-size:300% auto;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:gradientShift 5s linear infinite}
+.hero-sub{font-size:17px;color:var(--t2);max-width:520px;margin:0 auto 34px;line-height:1.7}
+.hero-btns{display:flex;gap:13px;justify-content:center;margin-bottom:52px}
+.hero-cta-p{padding:13px 28px;background:var(--p);color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;transition:all .2s}
+.hero-cta-p:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(59,130,246,.4)}
+.hero-cta-s{padding:13px 28px;background:transparent;color:var(--t);border:1px solid var(--bo);border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;transition:all .2s}
+.hero-cta-s:hover{border-color:var(--p);color:var(--p)}
+.dash-preview{background:var(--sf);border:1px solid var(--bo);border-radius:14px;padding:14px;max-width:820px;margin:0 auto;box-shadow:0 24px 60px rgba(0,0,0,.6);animation:float 5s ease-in-out infinite;overflow:hidden}
+.dp-topbar{display:flex;gap:5px;margin-bottom:11px}
+.dp-dot{width:9px;height:9px;border-radius:50%}
+.dp-inner{display:grid;grid-template-columns:120px 1fr;gap:10px;height:168px}
+.dp-sb{background:var(--bg);border-radius:7px;padding:9px 7px}
+.dp-s-item{height:7px;border-radius:3px;margin-bottom:7px;background:rgba(255,255,255,.1)}
+.dp-s-item:first-child{background:rgba(59,130,246,.5);width:65%}
+.dp-s-item:nth-child(2){width:80%}
+.dp-s-item:nth-child(3){width:75%}
+.dp-main{display:grid;grid-template-rows:auto 1fr;gap:10px}
+.dp-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}
+.dp-kpi{background:var(--bg);border-radius:7px;padding:8px 9px;height:44px}
+.dp-kpi-v{height:11px;border-radius:3px;margin-bottom:5px}
+.dp-kpi-l{height:6px;background:rgba(255,255,255,.08);border-radius:3px;width:75%}
+.dp-chart-area{background:var(--bg);border-radius:7px;padding:8px;display:flex;align-items:flex-end;gap:4px}
+.dp-bar-item{border-radius:2px 2px 0 0;flex:1;min-height:8px}
+.metrics-strip{display:flex;justify-content:center;gap:60px;padding:32px 48px;border-top:1px solid var(--bo);border-bottom:1px solid var(--bo);background:rgba(255,255,255,.01)}
+.metric-val{font-size:36px;font-weight:900;background:linear-gradient(135deg,var(--p),var(--a));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.metric-lbl{font-size:13px;color:var(--t2);margin-top:4px}
+.l-sec{padding:72px 48px}
+.l-sec-tag{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--p);margin-bottom:10px}
+.l-sec-title{font-size:36px;font-weight:800;color:var(--t);margin-bottom:14px;line-height:1.2;letter-spacing:-.5px}
+.l-sec-sub{font-size:15px;color:var(--t2);max-width:480px;line-height:1.7}
+.prob-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:40px}
+.prob-card{background:var(--c);border:1px solid var(--bo);border-radius:var(--r);padding:20px;transition:all .25s}
+.prob-card:hover{transform:translateY(-4px);border-color:rgba(239,68,68,.4);box-shadow:0 12px 28px rgba(239,68,68,.1)}
+.prob-ic{width:40px;height:40px;background:rgba(239,68,68,.1);border-radius:9px;display:flex;align-items:center;justify-content:center;margin-bottom:13px;color:var(--d)}
+.prob-title{font-size:13.5px;font-weight:700;color:var(--t);margin-bottom:6px}
+.prob-desc{font-size:12.5px;color:var(--t2);line-height:1.6}
+.sol-timeline{margin-top:40px;display:flex;flex-direction:column;gap:18px;max-width:620px}
+.sol-step{display:flex;gap:18px}
+.sol-num{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--p),var(--a));display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#fff;flex-shrink:0;margin-top:2px}
+.sol-body{flex:1}
+
+.sol-title{font-size:14.5px;font-weight:700;color:var(--t);margin-bottom:4px}
+.sol-desc{font-size:13px;color:var(--t2);line-height:1.6}
+.feat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:40px}
+.feat-card{background:var(--c);border:1px solid var(--bo);border-radius:var(--r);padding:20px;transition:all .25s}
+.feat-card:hover{transform:translateY(-4px);border-color:rgba(59,130,246,.35);box-shadow:0 12px 28px rgba(59,130,246,.09)}
+.feat-ic{width:40px;height:40px;border-radius:9px;display:flex;align-items:center;justify-content:center;margin-bottom:13px}
+.feat-title{font-size:13.5px;font-weight:700;color:var(--t);margin-bottom:6px}
+.feat-desc{font-size:12.5px;color:var(--t2);line-height:1.6}
+.landing-footer{padding:28px 48px;border-top:1px solid var(--bo);display:flex;align-items:center;justify-content:space-between}
+.footer-links{display:flex;gap:22px}
+.footer-links a{color:var(--t2);font-size:13px;transition:color .2s}
+.footer-links a:hover{color:var(--t)}
+.reveal{opacity:0;transform:translateY(16px);transition:opacity .55s ease,transform .55s ease}
+.reveal.visible{opacity:1;transform:none}
+.analytics-2col{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:20px}
+.agent-row{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.04)}
+.agent-row:last-child{border-bottom:none}
+.ag-av{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff;flex-shrink:0}
+.ag-name{font-size:13px;font-weight:600;color:var(--t)}
+.ag-stat{font-size:11.5px;color:var(--t2)}
+.ag-bar-wrap{flex:1}
+.ag-bar-bg{height:4px;background:rgba(255,255,255,.08);border-radius:2px}
+.ag-bar-fill{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--p),var(--a))}
+.cust-row-expanded{background:rgba(59,130,246,.05);border-left:2px solid var(--p)}
+.divider-sec{height:1px;background:linear-gradient(90deg,transparent,var(--bo),transparent);margin:24px 0}
+.case-panel-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.4);z-index:99;display:none;backdrop-filter:blur(2px)}
+.case-panel-overlay.open{display:block}
+.case-detail-panel{position:fixed;top:0;right:0;bottom:0;width:380px;background:var(--sf);border-left:1px solid var(--bo);z-index:100;transform:translateX(100%);transition:transform .3s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;box-shadow:-10px 0 40px rgba(0,0,0,.4)}
+.case-detail-panel.open{transform:translateX(0)}
+.cd-hdr{padding:16px 24px;border-bottom:1px solid var(--bo);display:flex;justify-content:space-between;align-items:center}
+.cd-body{flex:1;overflow-y:auto;padding:24px}
+.cd-close{background:rgba(255,255,255,.05);border:none;width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;color:var(--t2);cursor:pointer;transition:all .2s}
+.cd-close:hover{background:rgba(255,255,255,.1);color:var(--t)}
+.cd-body::-webkit-scrollbar{width:0}
+
+/* EXTENSION STYLES */
+.chart-wrapper{position:relative;flex:1;min-height:160px;width:100%}
+.chart-card{display:flex;flex-direction:column;min-height:0}
+.ins-card{display:flex;flex-direction:column;min-height:0}
+@keyframes gridScan{0%{transform:translateY(0)}100%{transform:translateY(60px)}}
+@keyframes gridScanGlow{0%,100%{opacity:0;transform:scale(.8)}5%{opacity:1;transform:scale(1.2)}10%{opacity:0;transform:scale(1)}}
+.map-grid-bg{position:absolute;inset:-60px 0;background-image:linear-gradient(rgba(59,130,246,.08) 1px,transparent 1px),linear-gradient(90deg,rgba(59,130,246,.08) 1px,transparent 1px);background-size:60px 60px;animation:gridScan 30s linear infinite;z-index:0;pointer-events:none}
+.map-grid-glow1{position:absolute;left:30%;top:40%;width:4px;height:4px;background:#3B82F6;border-radius:50%;box-shadow:0 0 15px 4px rgba(59,130,246,.8);animation:gridScanGlow 8s infinite 2s;z-index:1;pointer-events:none;opacity:0}
+.map-grid-glow2{position:absolute;left:70%;top:60%;width:4px;height:4px;background:#3B82F6;border-radius:50%;box-shadow:0 0 15px 4px rgba(59,130,246,.8);animation:gridScanGlow 12s infinite 6s;z-index:1;pointer-events:none;opacity:0}
+.map-grid-glow3{position:absolute;left:50%;top:20%;width:4px;height:4px;background:#3B82F6;border-radius:50%;box-shadow:0 0 15px 4px rgba(59,130,246,.8);animation:gridScanGlow 15s infinite 1s;z-index:1;pointer-events:none;opacity:0}
+.map-grid-glow4{position:absolute;left:80%;top:30%;width:4px;height:4px;background:#3B82F6;border-radius:50%;box-shadow:0 0 15px 4px rgba(59,130,246,.8);animation:gridScanGlow 10s infinite 4s;z-index:1;pointer-events:none;opacity:0}
+</style>
+</head>
+<body>
+
+<!-- ===== LANDING PAGE ===== -->
+<div id="landing">
+  <nav class="l-nav">
+    <div class="l-logo"><div class="l-logo-ic">RF</div>ResolveFlow <span style="color:var(--p)">AI</span></div>
+    <div class="l-nav-links"><a href="#">Product</a><a href="#">Solutions</a><a href="#">Pricing</a><a href="#">Docs</a></div>
+    <div class="l-nav-btns">
+      <button class="l-btn l-btn-ghost">Sign In</button>
+      <button class="l-btn l-btn-prim" onclick="enterApp()">Get Started</button>
+    </div>
+  </nav>
+  <div id="landing-content"></div>
+</div>
+
+<!-- ===== APP SHELL ===== -->
+<div class="app-shell" id="app">
+  <aside class="sidebar" id="sidebar">
+    <div class="sb-logo">
+      <div class="sb-logo-ic">RF</div>
+      <div class="sb-logo-txt">Resolve<span>Flow</span> AI</div>
+    </div>
+    <nav class="sb-nav" id="sb-nav"></nav>
+    <div class="sb-bottom">
+      <button class="sb-toggle" id="sb-toggle-btn" onclick="toggleSidebar()">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M15 18l-6-6 6-6"/></svg>
+        <span class="nav-label" id="sb-toggle-lbl">Collapse</span>
+      </button>
+    </div>
+  </aside>
+  <div class="main-content">
+    <nav class="navbar" id="navbar">
+      <div class="nb-search" id="nb-search-wrap">
+        <svg class="nb-search-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <input type="text" id="globalSearch" placeholder="Search cases, shipments..." oninput="handleSearch(this.value)" autocomplete="off">
+        <div class="search-drop" id="search-results"></div>
+      </div>
+      <div class="nb-actions">
+        <button class="nb-btn btn-primary" onclick="openNewCaseModal()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          <span id="nb-new-case">New Case</span>
+        </button>
+        <button class="lang-btn" id="lang-toggle" onclick="toggleLang()">EN</button>
+        <button class="nb-icon-btn" id="notif-btn" onclick="toggleNotif()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:17px;height:17px"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          <span class="nb-badge"></span>
+        </button>
+        <div class="notif-drop" id="notif-drop"></div>
+        <div class="user-av" title="Arjun Mehta">AM</div>
+      </div>
+    </nav>
+    <div class="page-content" id="page-content">
+      <div class="page" id="page-dashboard"></div>
+      <div class="inbox-page" id="page-inbox"></div>
+      <div class="page" id="page-cases"></div>
+      <div class="page" id="page-customers"></div>
+      <div class="page" id="page-shipments"></div>
+      <div class="page" id="page-automation"></div>
+      <div class="page" id="page-analytics"></div>
+      <div class="page" id="page-ai-insights"></div>
+      <div class="page" id="page-knowledge"></div>
+      <div class="cmd-page" id="page-command"></div>
+      <div class="page" id="page-settings"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== CASE DETAIL PANEL ===== -->
+<div class="case-panel-overlay" id="cd-overlay" onclick="closeCaseDetail()"></div>
+<div class="case-detail-panel" id="case-detail-panel"></div>
+
+<!-- ===== CHATBOT ===== -->
+<button class="cb-btn" id="cb-toggle" onclick="toggleChatbot()">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:22px;height:22px"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+</button>
+<div class="cb-panel" id="cb-panel">
+  <div class="cb-hdr">
+    <div class="cb-av">AI</div>
+    <div>
+      <div class="cb-name">ResolveFlow AI</div>
+      <div class="cb-status"><div style="width:5px;height:5px;background:var(--s);border-radius:50%;animation:breathe 2s infinite"></div> Online</div>
+    </div>
+    <button class="cb-close" onclick="toggleChatbot()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+  <div class="cb-msgs" id="cb-msgs"></div>
+  <div class="cb-inp-bar">
+    <input class="cb-inp" id="cb-inp" placeholder="Ask about a shipment or case..." onkeydown="if(event.key==='Enter')sendChatMsg()">
+    <button class="cb-send" onclick="sendChatMsg()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:15px;height:15px"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+    </button>
+  </div>
+</div>
+
+<!-- ===== NEW CASE MODAL ===== -->
+<div class="case-panel-overlay" id="new-case-mod">
+  <div class="case-detail-panel" style="left:50%; top:50%; transform:translate(-50%,-50%); height:auto; width:540px; border-radius:12px; transition:none; flex:none" id="nc-inner">
+    <div class="cd-hdr"><div style="font-weight:700;display:flex;align-items:center;gap:8px"><svg viewBox="0 0 24 24" fill="none" stroke="var(--p)" stroke-width="2" style="width:16px;height:16px"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="12" y1="18" x2="12" y2="12"></line><line x1="9" y1="15" x2="15" y2="15"></line></svg> Create New Case</div><button class="cd-close" onclick="closeNewCaseModal()">×</button></div>
+    <div class="cd-body" style="display:flex;flex-direction:column;gap:18px;overflow:visible;padding:24px">
+      
+      <div class="form-row">
+        <label class="form-lbl">Customer / Company</label>
+        <input type="text" id="nc-cust" class="form-inp" placeholder="e.g. Apex Logistics">
+      </div>
+      
+      <div class="form-2col" style="margin-bottom:0">
+        <div class="form-row">
+          <label class="form-lbl">Linked Shipment</label>
+          <input type="text" id="nc-ship" class="form-inp" placeholder="e.g. RF-2847">
+        </div>
+        <div class="form-row">
+          <label class="form-lbl">Case Type</label>
+          <select id="nc-type" class="form-inp">
+            <option value="Issue">General Issue</option>
+            <option value="Damage">Damage Claim</option>
+            <option value="Delay">Delay Report</option>
+            <option value="Missing">Missing Item</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <label class="form-lbl">Issue Details</label>
+        <textarea id="nc-issue" class="form-inp" rows="3" placeholder="Provide a brief description of the problem..." style="height:auto;resize:vertical"></textarea>
+      </div>
+      
+      <hr style="border:none;border-top:1px solid var(--bo);margin:4px 0">
+
+      <div class="form-2col" style="margin-bottom:0">
+        <div class="form-row">
+          <label class="form-lbl">Priority</label>
+          <select id="nc-prio" class="form-inp">
+            <option value="low">Low</option>
+            <option value="medium" selected>Medium</option>
+            <option value="high">High</option>
+            <option value="critical">Critical</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <label class="form-lbl">Source Channel</label>
+          <select id="nc-chan" class="form-inp">
+            <option value="email">Email</option>
+            <option value="whatsapp">WhatsApp</option>
+            <option value="voice">Voice</option>
+            <option value="chat">Chat</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-2col" style="margin-bottom:0">
+        <div class="form-row">
+          <label class="form-lbl">Assigned Agent</label>
+          <select id="nc-agent" class="form-inp">
+            <option value="Unassigned">Unassigned</option>
+            <option value="Priya Sharma">Priya Sharma</option>
+            <option value="Karthik Rao">Karthik Rao</option>
+            <option value="Sneha Pillai">Sneha Pillai</option>
+            <option value="Arjun Mehta">Arjun Mehta</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <label class="form-lbl">Expected SLA</label>
+          <select id="nc-sla" class="form-inp">
+            <option value="24h">24 Hours (Standard)</option>
+            <option value="8h">8 Hours</option>
+            <option value="4h">4 Hours</option>
+            <option value="1h">1 Hour (Urgent)</option>
+          </select>
+        </div>
+      </div>
+
+      <button class="btn-primary" style="width:100%; justify-content:center; padding:12px; margin-top:10px; font-size:14px; letter-spacing:0.5px" onclick="submitNewCase()">Create Case</button>
+    </div>
+  </div>
+</div>
+
+<script>
+
+// ==================== DATA LAYER ====================
+const shipments = [
+  {id:'RF-2847',customer:'Ravi Kumar',company:'BlueStar Exports',status:'In Transit',location:'Pune',route:'Mumbai → Delhi',type:'Standard',weight:12.5,eta:'Mar 18, 2026',lat:35,lng:51,slaDue:Date.now()+9000000,priority:'high'},
+  {id:'RF-3102',customer:'Ananya Krishnan',company:'SunRise Logistics',status:'Delivered',location:'Bangalore',route:'Chennai → Bangalore',type:'Express',weight:3.2,eta:'Mar 13, 2026',lat:75,lng:75,slaDue:Date.now()+86400000,priority:'low'},
+  {id:'RF-3391',customer:'Mohammed Farooq',company:'Delta Freight',status:'Delayed',location:'Nagpur',route:'Hyderabad → Kolkata',type:'Standard',weight:28.0,eta:'Mar 20, 2026',lat:60,lng:42,slaDue:Date.now()+3600000,priority:'critical'},
+  {id:'RF-3548',customer:'Priya Nair',company:'Zenith Cargo',status:'Out for Delivery',location:'Ahmedabad',route:'Pune → Ahmedabad',type:'Express',weight:5.8,eta:'Mar 14, 2026',lat:22,lng:39,slaDue:Date.now()+7200000,priority:'medium'},
+  {id:'RF-3627',customer:'Arjun Singh',company:'TrueSpeed Couriers',status:'In Transit',location:'Jaipur',route:'Delhi → Jaipur',type:'Standard',weight:9.0,eta:'Mar 16, 2026',lat:29,lng:27,slaDue:Date.now()+18000000,priority:'medium'},
+  {id:'RF-3780',customer:'Kavitha Reddy',company:'Horizon Shipping',status:'Delayed',location:'Surat',route:'Mumbai → Ahmedabad',type:'Fragile',weight:2.1,eta:'Mar 17, 2026',lat:24,lng:43,slaDue:Date.now()+5400000,priority:'high'},
+  {id:'RF-3891',customer:'Dinesh Patel',company:'FastTrack India',status:'In Transit',location:'Bhopal',route:'Pune → Delhi',type:'Heavy',weight:48.5,eta:'Mar 19, 2026',lat:37,lng:32,slaDue:Date.now()+28800000,priority:'low'},
+  {id:'RF-4012',customer:'Sunita Sharma',company:'Oakwood Exports',status:'Processing',location:'Mumbai Hub',route:'Mumbai → Chennai',type:'Express',weight:7.3,eta:'Mar 15, 2026',lat:34,lng:63,slaDue:Date.now()+14400000,priority:'medium'},
+  {id:'RF-4155',customer:'Vikram Bose',company:'NorthStar Cargo',status:'Delivered',location:'Kolkata',route:'Delhi → Kolkata',type:'Standard',weight:15.0,eta:'Mar 13, 2026',lat:77,lng:30,slaDue:Date.now()+172800000,priority:'low'},
+  {id:'RF-4267',customer:'Meera Joshi',company:'Silverline Freight',status:'In Transit',location:'Hyderabad',route:'Bangalore → Hyderabad',type:'Express',weight:4.4,eta:'Mar 15, 2026',lat:63,lng:55,slaDue:Date.now()+10800000,priority:'medium'},
+  {id:'RF-4399',customer:'Rohit Agarwal',company:'PrimeMover Logistics',status:'Delayed',location:'Lucknow',route:'Delhi → Lucknow',type:'Standard',weight:22.0,eta:'Mar 18, 2026',lat:51,lng:21,slaDue:Date.now()+1800000,priority:'critical'},
+  {id:'RF-4521',customer:'Lakshmi Iyer',company:'Gateway Exports',status:'Out for Delivery',location:'Chennai',route:'Bangalore → Chennai',type:'Fragile',weight:1.8,eta:'Mar 13, 2026',lat:78,lng:72,slaDue:Date.now()+3600000,priority:'high'}
+];
+
+const cases = [
+  {id:'CS-1042',customer:'Ravi Kumar',company:'BlueStar Exports',issue:'Package Delayed Beyond ETA',channel:'email',priority:'high',status:'In Progress',agent:'Priya Sharma',trackingId:'RF-2847',sla:'2h 30m',created:'Mar 13, 09:15',slaDue:Date.now()+9000000},
+  {id:'CS-1043',customer:'Mohammed Farooq',company:'Delta Freight',issue:'Shipment Stuck in Transit',channel:'whatsapp',priority:'critical',status:'Open',agent:'Karthik Rao',trackingId:'RF-3391',sla:'45m',created:'Mar 13, 10:22',slaDue:Date.now()+2700000},
+  {id:'CS-1044',customer:'Kavitha Reddy',company:'Horizon Shipping',issue:'Fragile Item Damaged',channel:'chat',priority:'high',status:'Escalated',agent:'Sneha Pillai',trackingId:'RF-3780',sla:'1h 15m',created:'Mar 13, 08:55',slaDue:Date.now()+4500000},
+  {id:'CS-1045',customer:'Priya Nair',company:'Zenith Cargo',issue:'Wrong Delivery Address',channel:'voice',priority:'medium',status:'In Progress',agent:'Arjun Mehta',trackingId:'RF-3548',sla:'4h',created:'Mar 12, 16:30',slaDue:Date.now()+14400000},
+  {id:'CS-1046',customer:'Ananya Krishnan',company:'SunRise Logistics',issue:'Missing Item in Order',channel:'email',priority:'medium',status:'Resolved',agent:'Priya Sharma',trackingId:'RF-3102',sla:'SLA Met',created:'Mar 12, 14:10',slaDue:Date.now()-3600000},
+  {id:'CS-1047',customer:'Arjun Singh',company:'TrueSpeed Couriers',issue:'Package Delayed',channel:'whatsapp',priority:'low',status:'Open',agent:'Karthik Rao',trackingId:'RF-3627',sla:'8h',created:'Mar 13, 11:00',slaDue:Date.now()+28800000},
+  {id:'CS-1048',customer:'Dinesh Patel',company:'FastTrack India',issue:'Heavy Shipment Mishandled',channel:'email',priority:'high',status:'In Progress',agent:'Sneha Pillai',trackingId:'RF-3891',sla:'3h',created:'Mar 13, 07:40',slaDue:Date.now()+10800000},
+  {id:'CS-1049',customer:'Sunita Sharma',company:'Oakwood Exports',issue:'Order Processing Delay',channel:'chat',priority:'low',status:'Open',agent:'Arjun Mehta',trackingId:'RF-4012',sla:'12h',created:'Mar 13, 12:00',slaDue:Date.now()+43200000},
+  {id:'CS-1050',customer:'Rohit Agarwal',company:'PrimeMover Logistics',issue:'Shipment Not Moving',channel:'voice',priority:'critical',status:'Escalated',agent:'Priya Sharma',trackingId:'RF-4399',sla:'30m',created:'Mar 13, 13:15',slaDue:Date.now()+1800000},
+  {id:'CS-1051',customer:'Meera Joshi',company:'Silverline Freight',issue:'Incorrect ETA Shown',channel:'email',priority:'medium',status:'In Progress',agent:'Karthik Rao',trackingId:'RF-4267',sla:'5h',created:'Mar 13, 10:45',slaDue:Date.now()+18000000},
+  {id:'CS-1052',customer:'Lakshmi Iyer',company:'Gateway Exports',issue:'Fragile Package Cracked',channel:'whatsapp',priority:'high',status:'Open',agent:'Sneha Pillai',trackingId:'RF-4521',sla:'1h',created:'Mar 13, 14:00',slaDue:Date.now()+3600000},
+  {id:'CS-1053',customer:'Vikram Bose',company:'NorthStar Cargo',issue:'Delivery Confirmation Missing',channel:'email',priority:'low',status:'Resolved',agent:'Arjun Mehta',trackingId:'RF-4155',sla:'SLA Met',created:'Mar 12, 09:00',slaDue:Date.now()-7200000},
+  {id:'CS-1054',customer:'Ravi Kumar',company:'BlueStar Exports',issue:'Payment Dispute on Return',channel:'email',priority:'medium',status:'Open',agent:'Priya Sharma',trackingId:'RF-2847',sla:'6h',created:'Mar 13, 15:00',slaDue:Date.now()+21600000},
+  {id:'CS-1055',customer:'Mohammed Farooq',company:'Delta Freight',issue:'Customs Clearance Delay',channel:'chat',priority:'critical',status:'Escalated',agent:'Karthik Rao',trackingId:'RF-3391',sla:'20m',created:'Mar 13, 15:30',slaDue:Date.now()+1200000},
+  {id:'CS-1056',customer:'Kavitha Reddy',company:'Horizon Shipping',issue:'Refund Not Processed',channel:'email',priority:'medium',status:'In Progress',agent:'Sneha Pillai',trackingId:'RF-3780',sla:'4h',created:'Mar 13, 13:00',slaDue:Date.now()+14400000}
+];
+
+const conversations = [
+  {id:1,caseId:'CS-1042',customer:'Ravi Kumar',initials:'RK',channel:'email',lastMsg:'My RF-2847 still hasn\'t arrived.',time:'10m ago',unread:3,sla:'urgent',color:'#3B82F6',
+    messages:[
+      {role:'customer',text:'Hello, my shipment RF-2847 was supposed to arrive by March 15th but it hasn\'t reached yet.',time:'9:15 AM'},
+      {role:'agent',text:'Hi Ravi, I apologize for the inconvenience. Let me pull up your shipment details right away.',time:'9:22 AM'},
+      {role:'ai',text:'AI Insight: Shipment RF-2847 is currently in Pune due to a highway checkpoint delay. Expected delay: 2 days. Recommend proactive customer communication.'},
+      {role:'customer',text:'It\'s been 3 days already. This is urgent — these are export materials.',time:'9:30 AM'},
+      {role:'agent',text:'I completely understand the urgency, Ravi. I\'ve flagged your case as high priority and escalated to our logistics team. You will receive an update within 2 hours.',time:'9:45 AM'},
+      {role:'customer',text:'Thank you. Please make sure my RF-2847 still hasn\'t arrived.',time:'10:01 AM'}
+    ]},
+  {id:2,caseId:'CS-1043',customer:'Mohammed Farooq',initials:'MF',channel:'whatsapp',lastMsg:'Shipment stuck since 3 days',time:'22m ago',unread:2,sla:'urgent',color:'#22C55E',
+    messages:[
+      {role:'customer',text:'My shipment RF-3391 has been showing the same location for 3 days. What is happening?',time:'10:00 AM'},
+      {role:'agent',text:'Hello Mohammed, we sincerely apologize. I can see RF-3391 is stuck at Nagpur due to a vehicle breakdown. We\'re arranging alternate transport.',time:'10:15 AM'}
+    ]},
+  {id:3,caseId:'CS-1044',customer:'Kavitha Reddy',initials:'KR',channel:'chat',lastMsg:'Item arrived broken, need replacement',time:'1h ago',unread:1,sla:'urgent',color:'#F59E0B',
+    messages:[
+      {role:'customer',text:'My fragile shipment RF-3780 arrived with the package completely crushed. The item is broken.',time:'8:55 AM'},
+      {role:'agent',text:'We are extremely sorry to hear this, Kavitha. Could you please share photos of the damage? We will initiate a replacement immediately.',time:'9:10 AM'},
+      {role:'customer',text:'Item arrived broken, need replacement',time:'10:20 AM'}
+    ]},
+  {id:4,caseId:'CS-1045',customer:'Priya Nair',initials:'PN',channel:'voice',lastMsg:'Address correction needed',time:'2h ago',unread:0,sla:'medium',color:'#8B5CF6',
+    messages:[
+      {role:'customer',text:'I realized the delivery address on RF-3548 is wrong. Can you change it?',time:'4:30 PM'},
+      {role:'agent',text:'Hi Priya, we can try to update the address since the shipment is still in transit. Let me check with our operations team.',time:'4:45 PM'}
+    ]},
+  {id:5,caseId:'CS-1047',customer:'Arjun Singh',initials:'AS',channel:'whatsapp',lastMsg:'When will it arrive?',time:'3h ago',unread:1,sla:'low',color:'#06B6D4',
+    messages:[
+      {role:'customer',text:'Hi, my shipment RF-3627 is showing Jaipur. When will it arrive in Delhi?',time:'11:00 AM'},
+      {role:'agent',text:'Hello Arjun, RF-3627 is currently at our Jaipur hub and will reach Delhi by March 16th.',time:'11:12 AM'}
+    ]},
+  {id:6,caseId:'CS-1048',customer:'Dinesh Patel',initials:'DP',channel:'email',lastMsg:'Heavy shipment was dropped',time:'4h ago',unread:2,sla:'medium',color:'#EF4444',
+    messages:[
+      {role:'customer',text:'Our heavy shipment RF-3891 weighing 48kg shows signs of mishandling. We need an investigation.',time:'7:40 AM'},
+      {role:'agent',text:'We take mishandling complaints very seriously, Dinesh. I\'ve opened an internal investigation for RF-3891.',time:'8:00 AM'}
+    ]},
+  {id:7,caseId:'CS-1050',customer:'Rohit Agarwal',initials:'RA',channel:'voice',lastMsg:'Escalate immediately',time:'45m ago',unread:3,sla:'urgent',color:'#F97316',
+    messages:[
+      {role:'customer',text:'My shipment RF-4399 has not moved from Lucknow for 4 days. This is unacceptable.',time:'1:15 PM'},
+      {role:'agent',text:'Rohit, I\'m escalating this to our senior operations team immediately. You\'ll receive a call within 30 minutes.',time:'1:20 PM'},
+      {role:'customer',text:'Escalate immediately',time:'1:35 PM'}
+    ]},
+  {id:8,caseId:'CS-1052',customer:'Lakshmi Iyer',initials:'LI',channel:'whatsapp',lastMsg:'Send photos requested',time:'1h ago',unread:1,sla:'urgent',color:'#22C55E',
+    messages:[
+      {role:'customer',text:'RF-4521 arrived with cracks in the packaging. The fragile item inside is damaged.',time:'2:00 PM'},
+      {role:'agent',text:'Lakshmi, I\'m so sorry about this. Please send us photos and we will process an immediate replacement.',time:'2:10 PM'}
+    ]},
+  {id:9,caseId:'CS-1051',customer:'Meera Joshi',initials:'MJ',channel:'email',lastMsg:'ETA keeps changing',time:'2h ago',unread:0,sla:'medium',color:'#818CF8',
+    messages:[
+      {role:'customer',text:'The ETA for RF-4267 changed 3 times in 2 days. Very frustrating.',time:'10:45 AM'},
+      {role:'agent',text:'Meera, I apologize for the inconsistent updates. The ETA changes are due to route optimization on the Bangalore-Hyderabad corridor.',time:'11:00 AM'}
+    ]},
+  {id:10,caseId:'CS-1049',customer:'Sunita Sharma',initials:'SS',channel:'chat',lastMsg:'What is processing status?',time:'3h ago',unread:0,sla:'low',color:'#34D399',
+    messages:[
+      {role:'customer',text:'My order RF-4012 is still showing Processing. When will it be dispatched?',time:'12:00 PM'},
+      {role:'agent',text:'Hi Sunita, RF-4012 is being packed at our Mumbai hub and will be dispatched today by 6 PM.',time:'12:10 PM'}
+    ]}
+];
+
+const customers = [
+  {id:'CUST-001',name:'Ravi Kumar',company:'BlueStar Exports',email:'ravi@bluestarexports.com',phone:'+91 98765 43210',totalCases:4,openCases:2,csat:4.2,lastContact:'Mar 13, 2026',city:'Mumbai'},
+  {id:'CUST-002',name:'Mohammed Farooq',company:'Delta Freight',email:'farooq@deltafreight.in',phone:'+91 91234 56789',totalCases:3,openCases:2,csat:3.1,lastContact:'Mar 13, 2026',city:'Hyderabad'},
+  {id:'CUST-003',name:'Kavitha Reddy',company:'Horizon Shipping',email:'kavitha@horizonship.com',phone:'+91 87654 32109',totalCases:5,openCases:2,csat:2.8,lastContact:'Mar 13, 2026',city:'Bangalore'},
+  {id:'CUST-004',name:'Priya Nair',company:'Zenith Cargo',email:'priya@zenithcargo.com',phone:'+91 93456 78901',totalCases:2,openCases:1,csat:4.5,lastContact:'Mar 12, 2026',city:'Kochi'},
+  {id:'CUST-005',name:'Ananya Krishnan',company:'SunRise Logistics',email:'ananya@sunriselogistics.in',phone:'+91 80123 45678',totalCases:3,openCases:0,csat:4.8,lastContact:'Mar 12, 2026',city:'Chennai'},
+  {id:'CUST-006',name:'Arjun Singh',company:'TrueSpeed Couriers',email:'arjun.s@truespeed.in',phone:'+91 77890 12345',totalCases:2,openCases:1,csat:4.0,lastContact:'Mar 13, 2026',city:'Delhi'},
+  {id:'CUST-007',name:'Dinesh Patel',company:'FastTrack India',email:'dinesh@fasttrack.co.in',phone:'+91 95678 90123',totalCases:3,openCases:1,csat:3.5,lastContact:'Mar 13, 2026',city:'Pune'},
+  {id:'CUST-008',name:'Sunita Sharma',company:'Oakwood Exports',email:'sunita@oakwoodexp.com',phone:'+91 88901 23456',totalCases:1,openCases:1,csat:4.3,lastContact:'Mar 13, 2026',city:'Mumbai'},
+  {id:'CUST-009',name:'Rohit Agarwal',company:'PrimeMover Logistics',email:'rohit@primemover.in',phone:'+91 97012 34567',totalCases:4,openCases:2,csat:2.5,lastContact:'Mar 13, 2026',city:'Lucknow'},
+  {id:'CUST-010',name:'Meera Joshi',company:'Silverline Freight',email:'meera@silverline.co',phone:'+91 82345 67890',totalCases:2,openCases:1,csat:3.9,lastContact:'Mar 13, 2026',city:'Pune'}
+];
+
+const articles = [
+  {id:1,title:'How to File a Damage Claim for Your Shipment',cat:'Claims',readTime:'4 min',views:1842,excerpt:'Step-by-step process for filing a damage claim including required photos, documentation timeline, and compensation policy.'},
+  {id:2,title:'Understanding SLA Timelines and Priority Levels',cat:'SLA Policy',readTime:'3 min',views:2310,excerpt:'Detailed breakdown of our service level agreements by shipment type, region, and priority category.'},
+  {id:3,title:'Tracking Your Shipment in Real Time',cat:'Tracking',readTime:'2 min',views:4120,excerpt:'How to use the tracking portal, read status codes, and set up SMS/email delivery alerts.'},
+  {id:4,title:'Address Correction & Redirect Process',cat:'Delivery',readTime:'3 min',views:987,excerpt:'How to request an address change after dispatch, cut-off timelines, and applicable charges.'},
+  {id:5,title:'Fragile Item Handling Guidelines',cat:'Packaging',readTime:'5 min',views:1203,excerpt:'Our certified fragile handling protocol, packaging standards, and what to do if a fragile item arrives damaged.'},
+  {id:6,title:'Customs Clearance for Interstate Shipments',cat:'Compliance',readTime:'6 min',views:743,excerpt:'GST documentation, e-way bill requirements, and how to resolve customs holds on your shipment.'},
+  {id:7,title:'Refund & Return Policy for Lost Shipments',cat:'Refunds',readTime:'4 min',views:1567,excerpt:'Timelines for declaring a shipment as lost, refund processing steps, and interim compensation.'},
+  {id:8,title:'Agent Response Templates for Common Issues',cat:'Agents',readTime:'7 min',views:3291,excerpt:'Approved communication templates for delays, damages, wrong delivery, and customer follow-ups.'}
+];
+
+const agents = [
+  {name:'Priya Sharma',initials:'PS',color:'#3B82F6',resolved:42,avg:'1.8h',csat:4.7,load:88},
+  {name:'Karthik Rao',initials:'KR',color:'#8B5CF6',resolved:35,avg:'2.1h',csat:4.4,load:72},
+  {name:'Sneha Pillai',initials:'SP',color:'#22C55E',resolved:39,avg:'2.4h',csat:4.6,load:80},
+  {name:'Arjun Mehta',initials:'AM',color:'#F59E0B',resolved:28,avg:'3.1h',csat:4.1,load:60},
+  {name:'Divya Nair',initials:'DN',color:'#EF4444',resolved:33,avg:'2.6h',csat:4.5,load:68},
+  {name:'Suresh Babu',initials:'SB',color:'#06B6D4',resolved:22,avg:'3.8h',csat:3.9,load:45}
+];
+
+const liveAlerts = [
+  {type:'danger',title:'SLA Breach Alert',desc:'CS-1043 breached SLA — Mohammed Farooq, RF-3391',time:'Just now'},
+  {type:'warning',title:'Shipment Delayed',desc:'RF-3780 delayed at Surat checkpoint — ETA updated to Mar 17',time:'3m ago'},
+  {type:'danger',title:'Critical Case Escalated',desc:'CS-1050 escalated to senior ops — Rohit Agarwal, RF-4399',time:'8m ago'},
+  {type:'primary',title:'New Case Opened',desc:'CS-1056 created — Kavitha Reddy, RF-3780, Refund Dispute',time:'12m ago'},
+  {type:'success',title:'Case Resolved',desc:'CS-1053 resolved by Arjun Mehta — Vikram Bose, RF-4155',time:'18m ago'},
+  {type:'warning',title:'Anomaly Detected',desc:'3 shipments on Chennai → Bangalore route showing similar delays',time:'25m ago'}
+];
+
+// ==================== i18n ====================
+const i18n = {
+  en:{
+    dashboard:'Dashboard',inbox:'Inbox',cases:'Cases',customers:'Customers',
+    shipments:'Shipments',automation:'Automation',analytics:'Analytics',
+    aiInsights:'AI Insights',knowledge:'Knowledge Base',command:'Command Center',settings:'Settings',
+    newCase:'New Case',openCases:'Open Cases',activeShipments:'Active Shipments',
+    avgResolution:'Avg Resolution',slaAlerts:'SLA Alerts',csatScore:'CSAT Score',
+    complaintTrends:'Complaint Trends',complaintTypes:'Complaint Types',resolutionTime:'Resolution Time',
+    liveAlerts:'Live Alerts',searchPlaceholder:'Search cases, shipments...',
+    trackingId:'Tracking ID',statusLbl:'Status',routeLbl:'Route',weightLbl:'Weight',etaLbl:'ETA',
+    priorityLbl:'Priority',agentLbl:'Agent',createdLbl:'Created',collapse:'Collapse',
+    notifications:'Notifications',sendToCustomer:'Send to Customer'
+  },
+  ta:{
+    dashboard:'டாஷ்போர்டு',inbox:'இன்பாக்ஸ்',cases:'புகார்கள்',customers:'வாடிக்கையாளர்கள்',
+    shipments:'அனுப்பல்கள்',automation:'தானியங்கி',analytics:'பகுப்பாய்வு',
+    aiInsights:'AI நுண்ணறிவு',knowledge:'அறிவுத் தளம்',command:'கட்டளை மையம்',settings:'அமைப்புகள்',
+    newCase:'புதிய புகார்',openCases:'திறந்த புகார்கள்',activeShipments:'செயலில் அனுப்பல்கள்',
+    avgResolution:'சராசரி தீர்வு',slaAlerts:'SLA எச்சரிக்கைகள்',csatScore:'CSAT மதிப்பு',
+    complaintTrends:'புகார் போக்குகள்',complaintTypes:'புகார் வகைகள்',resolutionTime:'தீர்வு நேரம்',
+    liveAlerts:'நேரடி எச்சரிக்கைகள்',searchPlaceholder:'புகார்கள், அனுப்பல்கள் தேடு...',
+    trackingId:'கண்காணிப்பு ID',statusLbl:'நிலை',routeLbl:'பாதை',weightLbl:'எடை',etaLbl:'வரும் நேரம்',
+    priorityLbl:'முன்னுரிமை',agentLbl:'முகவர்',createdLbl:'உருவாக்கப்பட்டது',collapse:'சுருக்கு',
+    notifications:'அறிவிப்புகள்',sendToCustomer:'வாடிக்கையாளருக்கு அனுப்பு'
+  }
+};
+
+// ==================== STATE ====================
+let currentPage = '';
+let currentLang = 'en';
+let sidebarCollapsed = false;
+let activeConvId = 1;
+let chartInstances = {};
+let slaTimers = {};
+let notifOpen = false;
+let cbOpen = false;
+let expandedCust = null;
+let expandedShip = null;
+
+function t(key){return i18n[currentLang][key]||i18n['en'][key]||key;}
+
+// ==================== NAVIGATION ====================
+const navItems = [
+  {key:'dashboard',icon:'<path d="M3 3h7v7H3zM14 3h7v7h-7zM14 14h7v7h-7zM3 14h7v7H3z"/>',badge:0},
+  {key:'inbox',icon:'<path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/>',badge:7},
+  {key:'cases',icon:'<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>',badge:0},
+  {key:'customers',icon:'<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>',badge:0},
+  {key:'shipments',icon:'<rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/>',badge:3},
+  {key:'automation',icon:'<polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>',badge:0},
+  {key:'analytics',icon:'<line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>',badge:0},
+  {key:'ai-insights',icon:'<circle cx="12" cy="12" r="10"/><path d="m16 12-4-8-4 8"/><line x1="8" y1="12" x2="16" y2="12"/>',badge:0},
+  {key:'knowledge',icon:'<path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>',badge:0},
+  {key:'command',icon:'',badge:0},
+  {key:'settings',icon:'<circle cx="12" cy="12" r="3"/><path d="M19.14 12.94c.04-.3.06-.61.06-.94s-.02-.64-.07-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.488.488 0 0 0-.59-.22l-2.39.96a7.45 7.45 0 0 0-1.62-.94l-.36-2.54A.487.487 0 0 0 14 2h-3.84a.487.487 0 0 0-.49.42l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96a.488.488 0 0 0-.59.22L3.79 8.54a.49.49 0 0 0 .12.61l2.03 1.58c-.05.3-.07.62-.07.94s.02.64.07.94l-2.03 1.58a.49.49 0 0 0-.12.61l1.92 3.32c.12.22.37.3.59.22l2.39-.96c.49.37 1.03.7 1.62.94l.36 2.54c.05.24.27.42.49.42h3.84c.22 0 .44-.18.49-.42l.36-2.54c.59-.24 1.13-.57 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32a.49.49 0 0 0-.12-.61z"/>',badge:0}
+];
+
+function buildNav(){
+  const nav=document.getElementById('sb-nav');
+  nav.innerHTML=navItems.map(item=>`
+    <div class="nav-item ${currentPage===item.key?'active':''}" onclick="navigateTo('${item.key}')" id="nav-${item.key}">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">${item.icon}</svg>
+      <span class="nav-label">${t(item.key==='ai-insights'?'aiInsights':item.key==='knowledge'?'knowledge':item.key==='command'?'command':item.key)}</span>
+      ${item.badge?`<span class="nav-badge">${item.badge}</span>`:''}
+    </div>`).join('');
+}
+
+function navigateTo(page){
+  if(currentPage===page) return;
+  currentPage=page;
+  buildNav();
+  document.querySelectorAll('.page,.inbox-page,.cmd-page').forEach(p=>p.classList.remove('active'));
+  const el=document.getElementById('page-'+page);
+  if(el) el.classList.add('active');
+  renderPage(page);
+}
+
+function renderPage(page){
+  const map={
+    dashboard:renderDashboard,inbox:renderInbox,cases:renderCases,
+    customers:renderCustomers,shipments:renderShipments,automation:renderAutomation,
+    analytics:renderAnalytics,'ai-insights':renderAiInsights,knowledge:renderKnowledge,
+    command:renderCommand,settings:renderSettings
+  };
+  if(map[page]) map[page]();
+}
+
+// ==================== LANDING PAGE ====================
+function renderLanding(){
+  document.getElementById('landing-content').innerHTML=`
+  <div class="hero">
+    <div class="hero-badge"><div class="hero-badge-dot"></div>Now in Beta — Trusted by 50+ Logistics Companies</div>
+    <h1 class="hero-h1">Unified Customer Communication<br><span class="grad-txt">for Modern Logistics</span></h1>
+    <p class="hero-sub">ResolveFlow AI brings every customer conversation — email, WhatsApp, chat, and voice — into one intelligent platform. Resolve faster, know more, act smarter.</p>
+    <div class="hero-btns">
+      <button class="hero-cta-p">Request Demo</button>
+      <button class="hero-cta-s" onclick="enterApp()">Explore Platform →</button>
+    </div>
+    <div class="dash-preview">
+      <div class="dp-topbar">
+        <div class="dp-dot" style="background:#EF4444"></div>
+        <div class="dp-dot" style="background:#F59E0B"></div>
+        <div class="dp-dot" style="background:#22C55E"></div>
+      </div>
+      <div class="dp-inner">
+        <div class="dp-sb">
+          <div class="dp-s-item" style="width:65%"></div>
+          <div class="dp-s-item" style="width:80%"></div>
+          <div class="dp-s-item" style="width:70%"></div>
+          <div class="dp-s-item" style="width:55%"></div>
+          <div class="dp-s-item" style="width:75%"></div>
+          <div class="dp-s-item" style="width:60%"></div>
+          <div class="dp-s-item" style="width:85%"></div>
+        </div>
+        <div class="dp-main">
+          <div class="dp-kpis">
+            <div class="dp-kpi"><div class="dp-kpi-v" style="background:linear-gradient(90deg,#3B82F6,#60A5FA)"></div><div class="dp-kpi-l"></div></div>
+            <div class="dp-kpi"><div class="dp-kpi-v" style="background:linear-gradient(90deg,#8B5CF6,#A78BFA)"></div><div class="dp-kpi-l"></div></div>
+            <div class="dp-kpi"><div class="dp-kpi-v" style="background:linear-gradient(90deg,#22C55E,#4ADE80)"></div><div class="dp-kpi-l"></div></div>
+            <div class="dp-kpi"><div class="dp-kpi-v" style="background:linear-gradient(90deg,#F59E0B,#FCD34D)"></div><div class="dp-kpi-l"></div></div>
+          </div>
+          <div class="dp-chart-area">
+            ${[40,65,45,80,55,90,70,85,60,95,75,88].map(h=>`<div class="dp-bar-item" style="height:${h}%;background:linear-gradient(180deg,#3B82F6,#8B5CF6)"></div>`).join('')}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="metrics-strip">
+    <div class="metric-item"><div class="metric-val">60%</div><div class="metric-lbl">Faster Resolution</div></div>
+    <div class="metric-item"><div class="metric-val">4.8★</div><div class="metric-lbl">Customer Satisfaction</div></div>
+    <div class="metric-item"><div class="metric-val">10+</div><div class="metric-lbl">Channel Integrations</div></div>
+    <div class="metric-item"><div class="metric-val">50+</div><div class="metric-lbl">Logistics Clients</div></div>
+  </div>
+  <div class="l-sec reveal">
+    <div class="l-sec-tag">The Problem</div>
+    <div class="l-sec-title">Fragmented Support is Costing You Customers</div>
+    <div class="l-sec-sub">Logistics companies lose customers to siloed communication, repeated explanations, and invisible operational breakdowns.</div>
+    <div class="prob-grid">
+      <div class="prob-card reveal"><div class="prob-ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div><div class="prob-title">Fragmented Channels</div><div class="prob-desc">Emails, WhatsApp, calls and chat are all in separate tools. Agents waste time context-switching and customers repeat themselves.</div></div>
+      <div class="prob-card reveal"><div class="prob-ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><div class="prob-title">Slow Resolution Times</div><div class="prob-desc">Without shipment context linked to conversations, agents spend 40% of their time just gathering information before helping.</div></div>
+      <div class="prob-card reveal"><div class="prob-ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></div><div class="prob-title">Zero Operational Visibility</div><div class="prob-desc">Operations teams have no real-time view of which routes are causing complaints, which agents are overloaded, or where SLAs are breaching.</div></div>
+      <div class="prob-card reveal"><div class="prob-ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div><div class="prob-title">Repeated SLA Breaches</div><div class="prob-desc">Without automated monitoring and escalation, high-priority cases slip through and SLA deadlines are missed consistently.</div></div>
+    </div>
+  </div>
+  <div class="l-sec reveal" style="background:rgba(59,130,246,0.03);border-top:1px solid var(--bo);border-bottom:1px solid var(--bo)">
+    <div class="l-sec-tag">The Solution</div>
+    <div class="l-sec-title">One Platform. Every Conversation. Full Context.</div>
+    <div class="l-sec-sub">ResolveFlow AI connects your communication, tracking, and AI into a single operations hub.</div>
+    <div class="sol-timeline">
+      <div class="sol-step reveal"><div class="sol-num">1</div><div class="sol-body"><div class="sol-title">Customer sends a complaint</div><div class="sol-desc">Via email, WhatsApp, chat, or voice — all routed to ResolveFlow automatically, no agent setup needed.</div></div></div>
+      <div class="sol-step reveal"><div class="sol-num">2</div><div class="sol-body"><div class="sol-title">AI classifies and prioritizes</div><div class="sol-desc">Our NLP engine identifies the complaint type, urgency, and affected shipment in under 2 seconds.</div></div></div>
+      <div class="sol-step reveal"><div class="sol-num">3</div><div class="sol-body"><div class="sol-title">Case is auto-created with full context</div><div class="sol-desc">The shipment, customer history, and SLA deadline are automatically linked to the new case.</div></div></div>
+      <div class="sol-step reveal"><div class="sol-num">4</div><div class="sol-body"><div class="sol-title">Agent resolves with AI assistance</div><div class="sol-desc">AI suggests the best response, pulling real-time shipment data and your knowledge base simultaneously.</div></div></div>
+      <div class="sol-step reveal"><div class="sol-num">5</div><div class="sol-body"><div class="sol-title">Customer satisfaction recorded</div><div class="sol-desc">CSAT feedback loops back into agent performance metrics and AI model improvement cycles.</div></div></div>
+    </div>
+  </div>
+  <div class="l-sec reveal">
+    <div class="l-sec-tag">Features</div>
+    <div class="l-sec-title">Built for Logistics. Powered by AI.</div>
+    <div class="l-sec-sub">Every feature designed around the realities of Indian logistics operations.</div>
+    <div class="feat-grid">
+      <div class="feat-card reveal"><div class="feat-ic" style="background:rgba(59,130,246,.1);color:var(--p)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg></div><div class="feat-title">Unified Omni-channel Inbox</div><div class="feat-desc">Email, WhatsApp, chat, and voice in one thread. Full customer history always visible to agents.</div></div>
+      <div class="feat-card reveal"><div class="feat-ic" style="background:rgba(139,92,246,.1);color:var(--a)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m16 12-4-8-4 8"/><line x1="8" y1="12" x2="16" y2="12"/></svg></div><div class="feat-title">AI Complaint Classification</div><div class="feat-desc">Automatically tag complaints as damage, delay, missing, or wrong item with 94% accuracy.</div></div>
+      <div class="feat-card reveal"><div class="feat-ic" style="background:rgba(34,197,94,.1);color:var(--s)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></div><div class="feat-title">Shipment Context Integration</div><div class="feat-desc">Every case is automatically linked to the shipment data, route, and real-time location.</div></div>
+      <div class="feat-card reveal"><div class="feat-ic" style="background:rgba(245,158,11,.1);color:var(--w)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div><div class="feat-title">Automated Workflow Routing</div><div class="feat-desc">Rules-based automation assigns, escalates, and notifies based on complaint type and SLA urgency.</div></div>
+      <div class="feat-card reveal"><div class="feat-ic" style="background:rgba(239,68,68,.1);color:var(--d)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><div class="feat-title">SLA Monitoring & Alerts</div><div class="feat-desc">Real-time SLA countdown for every case with auto-escalation before breaches happen.</div></div>
+      <div class="feat-card reveal"><div class="feat-ic" style="background:rgba(59,130,246,.1);color:var(--p)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div><div class="feat-title">AI Reply Suggestions</div><div class="feat-desc">Context-aware response drafts pulled from your knowledge base and shipment data, ready in one click.</div></div>
+      <div class="feat-card reveal"><div class="feat-ic" style="background:rgba(139,92,246,.1);color:var(--a)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div><div class="feat-title">Supervisor Analytics</div><div class="feat-desc">Agent performance, SLA compliance, channel volume, and CSAT all in one live dashboard.</div></div>
+      <div class="feat-card reveal"><div class="feat-ic" style="background:rgba(34,197,94,.1);color:var(--s)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 3 11 13 7 7.5"/><polygon points="12 3 7.5 7.5 7 7.5"/><path d="m2 22 7-7"/><path d="m22 22-7-7"/></svg></div><div class="feat-title">Command Center</div><div class="feat-desc">Real-time logistics map with heatmaps, anomaly detection, and live route visualization for ops teams.</div></div>
+    </div>
+  </div>
+  <div class="landing-footer">
+    <div class="l-logo"><div class="l-logo-ic" style="width:28px;height:28px;font-size:11px">RF</div><span>ResolveFlow <span style="color:var(--p)">AI</span></span></div>
+    <div class="footer-links"><a href="#">Privacy</a><a href="#">Terms</a><a href="#">Contact</a><a href="#">Blog</a></div>
+    <div style="font-size:12px;color:var(--t2)">© 2026 ResolveFlow AI. All rights reserved.</div>
+      </div>
+  </div>
+  `;
+  setupReveal();
+}
+
+function setupReveal(){
+  const revEls=document.querySelectorAll('.reveal');
+  const obs=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');}});
+  },{threshold:0.1});
+  revEls.forEach(el=>obs.observe(el));
+}
+
+function enterApp(){
+  document.getElementById('landing').classList.add('hidden');
+  document.getElementById('app').classList.add('active');
+  navigateTo('dashboard');
+  startRealtime();
+  buildNotifDropdown();
+  initChatbot();
+}
+
+
+// ==================== HELPERS ====================
+function prioEmoji(p){return p==='critical'?'':p==='high'?'':'';}
+function statusBadge(s){const m={'In Transit':'b-p','Delivered':'b-s','Delayed':'b-d','Out for Delivery':'b-w','Processing':'b-n','Open':'b-p','In Progress':'b-w','Resolved':'b-s','Escalated':'b-d','Critical':'b-d'};return`<span class="badge ${m[s]||'b-n'}">${s}</span>`}
+function priorityBadge(p){const m={critical:'b-d',high:'b-w',medium:'b-a',low:'b-s'};return`<span class="badge ${m[p]||'b-n'}">${p.charAt(0).toUpperCase()+p.slice(1)}</span>`}
+function channelIcon(ch){const m={email:'',whatsapp:'',chat:'',voice:''};return m[ch]||'';}
+function fmtSla(due){const diff=due-Date.now();if(diff<=0)return'<span style="color:var(--d)">Breached</span>';const h=Math.floor(diff/3600000);const m=Math.floor((diff%3600000)/60000);return`${h}h ${m}m`;}
+function colorForIdx(i){return['#3B82F6','#8B5CF6','#22C55E','#F59E0B','#EF4444','#06B6D4','#F97316','#EC4899','#10B981','#818CF8'][i%10];}
+
+// ==================== DASHBOARD ====================
+function renderDashboard(){
+  const el=document.getElementById('page-dashboard');
+  const openC=cases.filter(c=>c.status!=='Resolved').length;
+  const inTransit=shipments.filter(s=>s.status==='In Transit'||s.status==='Out for Delivery').length;
+  const slaAlert=cases.filter(c=>(c.slaDue-Date.now())<3600000&&c.status!=='Resolved').length;
+  el.innerHTML=`
+  <div class="page-hdr"><h1>${t('dashboard')}</h1><p>Operations overview — live data updated every 30 seconds</p></div>
+  <div class="kpi-grid">
+    <div class="kpi-card"><div class="kpi-top"><div class="kpi-ic" style="background:rgba(59,130,246,.12);color:var(--p)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg></div><span class="kpi-trend" style="background:rgba(239,68,68,.1);color:var(--d)">↑ 12%</span></div><div class="kpi-val">${openC}</div><div class="kpi-lbl">${t('openCases')}</div></div>
+    <div class="kpi-card"><div class="kpi-top"><div class="kpi-ic" style="background:rgba(139,92,246,.12);color:var(--a)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/></svg></div><span class="kpi-trend" style="background:rgba(34,197,94,.1);color:var(--s)">↑ 8%</span></div><div class="kpi-val">${inTransit}</div><div class="kpi-lbl">${t('activeShipments')}</div></div>
+    <div class="kpi-card"><div class="kpi-top"><div class="kpi-ic" style="background:rgba(34,197,94,.12);color:var(--s)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><span class="kpi-trend" style="background:rgba(34,197,94,.1);color:var(--s)">↓ 18%</span></div><div class="kpi-val">2.4h</div><div class="kpi-lbl">${t('avgResolution')}</div></div>
+    <div class="kpi-card"><div class="kpi-top"><div class="kpi-ic" style="background:rgba(239,68,68,.12);color:var(--d)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg></div><span class="kpi-trend" style="background:rgba(239,68,68,.1);color:var(--d)">↑ 3</span></div><div class="kpi-val" id="kpi-sla">${slaAlert}</div><div class="kpi-lbl">${t('slaAlerts')}</div></div>
+    <div class="kpi-card"><div class="kpi-top"><div class="kpi-ic" style="background:rgba(245,158,11,.12);color:var(--w)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div><span class="kpi-trend" style="background:rgba(34,197,94,.1);color:var(--s)">↑ 0.2</span></div><div class="kpi-val">4.3</div><div class="kpi-lbl">${t('csatScore')}</div></div>
+  </div>
+  <div class="charts-row">
+    <div class="chart-card"><div class="chart-ttl">${t('complaintTrends')}</div><div class="chart-wrapper"><canvas id="chart-trends"></canvas></div></div>
+    <div class="chart-card"><div class="chart-ttl">${t('complaintTypes')}</div><div class="chart-wrapper"><canvas id="chart-types"></canvas></div></div>
+    <div class="chart-card"><div class="chart-ttl">${t('resolutionTime')}</div><div class="chart-wrapper"><canvas id="chart-resolution"></canvas></div></div>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 340px;gap:12px">
+    <div class="card" style="padding:20px"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px"><span style="font-size:13px;font-weight:700">${t('liveAlerts')}</span><span class="badge b-d" style="animation:pulseGlow 3s infinite">● Live</span></div><div class="alert-feed" id="alert-feed"></div></div>
+    <div class="card" style="padding:20px"><div style="font-size:13px;font-weight:700;margin-bottom:14px">Top Agents Today</div>${agents.slice(0,5).map((a,i)=>`<div class="agent-row"><div class="ag-av" style="background:${a.color}">${a.initials}</div><div style="flex:1;min-width:0"><div class="ag-name">${a.name}</div><div class="ag-stat">${a.resolved} resolved · CSAT ${a.csat}</div><div class="ag-bar-wrap" style="margin-top:5px"><div class="ag-bar-bg"><div class="ag-bar-fill" style="width:${a.load}%"></div></div></div></div></div>`).join('')}</div>
+      </div>
+  </div>
+  `;
+  renderAlertFeed();
+  setTimeout(()=>{initDashboardCharts();},50);
+}
+
+function renderAlertFeed(){
+  const feed=document.getElementById('alert-feed');
+  if(!feed) return;
+  const colors={danger:'var(--d)',warning:'var(--w)',primary:'var(--p)',success:'var(--s)'};
+  feed.innerHTML=liveAlerts.slice(0,6).map(a=>`
+    <div class="af-item">
+      <div class="af-ic" style="background:rgba(${a.type==='danger'?'239,68,68':a.type==='warning'?'245,158,11':a.type==='success'?'34,197,94':'59,130,246'},.12);color:${colors[a.type]}">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      </div>
+      <div class="af-body"><div class="af-title">${a.title}</div><div class="af-desc">${a.desc}</div></div>
+      <div class="af-time">${a.time}</div>
+    </div>`).join('');
+}
+
+function initDashboardCharts(){
+  destroyChart('chart-trends');destroyChart('chart-types');destroyChart('chart-resolution');
+  const cfg={color:'rgba(255,255,255,0.06)',tickColor:'rgba(148,163,184,.6)',font:{family:'Inter',size:11}};
+  const gc={responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{color:cfg.color},ticks:{color:cfg.tickColor,font:cfg.font}},y:{grid:{color:cfg.color},ticks:{color:cfg.tickColor,font:cfg.font}}}};
+  const days=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+  chartInstances['chart-trends']=new Chart(document.getElementById('chart-trends'),{type:'line',data:{labels:days,datasets:[{data:[24,31,28,42,38,29,35],borderColor:'#3B82F6',backgroundColor:'rgba(59,130,246,.12)',fill:true,tension:.4,pointBackgroundColor:'#3B82F6',pointRadius:3},{data:[12,18,15,22,20,14,18],borderColor:'#8B5CF6',backgroundColor:'rgba(139,92,246,.06)',fill:true,tension:.4,pointBackgroundColor:'#8B5CF6',pointRadius:3}]},options:{...gc,plugins:{legend:{display:true,position:'bottom',labels:{color:'rgba(148,163,184,.8)',font:cfg.font,boxWidth:10,padding:10}}}}});
+  chartInstances['chart-types']=new Chart(document.getElementById('chart-types'),{type:'doughnut',data:{labels:['Delay','Damage','Wrong Addr','Missing','Other'],datasets:[{data:[38,22,18,14,8],backgroundColor:['#3B82F6','#EF4444','#F59E0B','#8B5CF6','#22C55E'],borderWidth:0,hoverOffset:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{color:'rgba(148,163,184,.8)',font:cfg.font,boxWidth:10,padding:8}}},cutout:'65%'}});
+  chartInstances['chart-resolution']=new Chart(document.getElementById('chart-resolution'),{type:'bar',data:{labels:days,datasets:[{data:[2.1,3.4,1.8,2.9,2.4,1.6,2.2],backgroundColor:'rgba(59,130,246,.7)',borderRadius:4,borderSkipped:false}]},options:{...gc}});
+}
+
+function destroyChart(id){if(chartInstances[id]){chartInstances[id].destroy();delete chartInstances[id];}}
+
+// ==================== INBOX ====================
+function renderInbox(){
+  const el=document.getElementById('page-inbox');
+  const conv=conversations.find(c=>c.id===activeConvId)||conversations[0];
+  const shipment=shipments.find(s=>s.id===conv.caseId.replace('CS','RF').replace(/-\d+$/,m=>m))||shipments[0];
+  const linkedShip=findShipmentForConv(conv);
+  const linkedCase=cases.find(c=>c.id===conv.caseId);
+  el.innerHTML=`
+  <div class="inbox-list">
+    <div class="inbox-list-hdr"><h3>${t('inbox')}</h3><span class="badge b-d">${conversations.reduce((a,c)=>a+c.unread,0)} unread</span></div>
+    ${conversations.map(c=>`
+    <div class="conv-item ${c.id===activeConvId?'active':''}" onclick="selectConv(${c.id})">
+      <div class="conv-av" style="background:${c.color}">${c.initials}</div>
+      <div class="conv-info">
+        <div class="conv-nr"><span class="conv-name">${c.customer}</span><span class="conv-time">${c.time}</span></div>
+        <div class="conv-prev">${c.lastMsg}</div>
+        <div class="conv-meta">
+          <span class="ch-badge ${c.sla==='urgent'?'sla-h':c.sla==='medium'?'sla-m':'sla-l'}">${channelIcon(c.channel)} ${c.channel}</span>
+          ${c.unread?`<span class="unread-dot">${c.unread}</span>`:''}
+        </div>
+      </div>
+    </div>`).join('')}
+  </div>
+  <div class="chat-area">
+    <div class="chat-hdr">
+      <div class="chat-hdr-av" style="background:${conv.color}">${conv.initials}</div>
+      <div><div class="chat-hdr-name">${conv.customer}</div><div class="chat-hdr-sub">${conv.caseId} · ${channelIcon(conv.channel)} ${conv.channel}</div></div>
+      <div style="margin-left:auto;display:flex;gap:8px">
+        ${statusBadge(linkedCase?linkedCase.status:'Open')}
+        ${priorityBadge(linkedCase?linkedCase.priority:'medium')}
+      </div>
+    </div>
+    <div class="chat-msgs" id="chat-msgs">
+      ${conv.messages.map(m=>{
+        if(m.role==='ai') return`<div class="msg-ai-bub"> ${m.text}    </div>
+  </div>
+  `;
+        return`<div class="msg-row ${m.role}"><div class="msg-bub ${m.role==='agent'?'msg-agnt':'msg-cust'}">${m.text}</div><div class="msg-time">${m.time||''}</div>    </div>
+  </div>
+  `;
+      }).join('')}
+    </div>
+    <div class="chat-input-bar">
+      <textarea class="chat-inp" id="chat-inp" placeholder="Type a reply..." rows="1"></textarea>
+      <button class="send-btn" onclick="sendChatReply()">Send <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:12px;height:12px"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button>
+    </div>
+  </div>
+  <div class="ctx-panel" id="ctx-panel">
+    <div class="ctx-sec">
+      <div class="ctx-ttl"> Customer</div>
+      <div class="ctx-row"><span class="ctx-lbl">Name</span><span class="ctx-val">${conv.customer}</span></div>
+      <div class="ctx-row"><span class="ctx-lbl">Company</span><span class="ctx-val">${customers.find(c=>c.name===conv.customer)?.company||'—'}</span></div>
+      <div class="ctx-row"><span class="ctx-lbl">Total Cases</span><span class="ctx-val">${customers.find(c=>c.name===conv.customer)?.totalCases||'—'}</span></div>
+      <div class="ctx-row"><span class="ctx-lbl">CSAT</span><span class="ctx-val">${customers.find(c=>c.name===conv.customer)?.csat||'—'} ★</span></div>
+    </div>
+    <div class="ctx-sec">
+      <div class="ctx-ttl"> Shipment</div>
+      ${linkedShip?`
+      <div class="ctx-row"><span class="ctx-lbl">ID</span><span class="ctx-val" style="color:var(--p);font-weight:700">${linkedShip.id}</span></div>
+      <div class="ctx-row"><span class="ctx-lbl">Status</span><span class="ctx-val">${statusBadge(linkedShip.status)}</span></div>
+      <div class="ctx-row"><span class="ctx-lbl">Location</span><span class="ctx-val">${linkedShip.location}</span></div>
+      <div class="ctx-row"><span class="ctx-lbl">Route</span><span class="ctx-val">${linkedShip.route}</span></div>
+      <div class="ctx-row"><span class="ctx-lbl">ETA</span><span class="ctx-val">${linkedShip.eta}</span></div>`:'<div style="font-size:12px;color:var(--t2)">No shipment linked</div>'}
+    </div>
+    <div class="ctx-sec">
+      <div class="ctx-ttl"> AI Suggestion</div>
+      <div class="ai-sug"><div class="ai-sug-lbl"> Suggested Reply</div>${generateAiSuggestion(conv,linkedShip)}</div>
+      <button onclick="useAiSuggestion()" style="margin-top:8px;width:100%;padding:7px;background:rgba(139,92,246,.1);border:1px solid rgba(139,92,246,.25);color:var(--a);border-radius:7px;cursor:pointer;font-size:12px;font-weight:600;font-family:'Inter',sans-serif">Use This Reply</button>
+    </div>
+    <div class="ctx-sec">
+      <div class="ctx-ttl"> SLA Status</div>
+      <div class="sla-box"><div class="sla-big" id="sla-countdown">--:--</div><div class="sla-lbl-sm">Until SLA breach</div></div>
+      ${linkedCase?`<div style="margin-top:8px;font-size:12px;color:var(--t2);text-align:center">${prioEmoji(linkedCase.priority)} ${linkedCase.priority.toUpperCase()} priority</div>`:''}
+    </div>
+
+    </div>
+    <div class="ctx-sec">
+      <div class="ctx-ttl"> Actions</div>
+      <div class="act-btns">
+        <button class="act-btn" style="background:var(--p);color:#fff" onclick="alert('Case escalated to supervisor!')">Escalate Case</button>
+        <button class="act-btn" style="background:rgba(34,197,94,.1);color:var(--s);border:1px solid rgba(34,197,94,.25)">Mark Resolved</button>
+        <button class="act-btn" style="background:rgba(59,130,246,.08);color:var(--p);border:1px solid rgba(59,130,246,.2)">Assign to Agent</button>
+        <button class="act-btn" style="background:rgba(255,255,255,.05);color:var(--t2);border:1px solid var(--bo)">Send KB Article</button>
+      </div>
+    </div>
+      </div>
+  </div>
+  `;
+  startSlaTimer(linkedCase);
+  const msgs=document.getElementById('chat-msgs');
+  if(msgs) msgs.scrollTop=msgs.scrollHeight;
+}
+
+function findShipmentForConv(conv){
+  const linkedCase=cases.find(c=>c.id===conv.caseId);
+  if(linkedCase) return shipments.find(s=>s.id===linkedCase.trackingId);
+  return null;
+}
+
+function generateAiSuggestion(conv,ship){
+  const msgs = conv.messages || [];
+  const lastCustMsg = [...msgs].reverse().find(m=>m.role==='customer')?.text.toLowerCase() || '';
+  const issue = conv.issue?.toLowerCase() || '';
+  const name = conv.customer.split(' ')[0];
+  const s = ship;
+
+  // Damage analysis
+  if(lastCustMsg.includes('damage') || lastCustMsg.includes('broken') || lastCustMsg.includes('crush') || issue.includes('damage') || issue.includes('cracked')) {
+    return `Dear ${name}, I am extremely sorry to hear about the damage to your shipment. Could you please share a few photos of the package and the item? I will immediately initiate the damage claim process and send a replacement request to our warehouse.`;
+  }
+
+  // Address correction
+  if(lastCustMsg.includes('address') || issue.includes('address')) {
+    return `Hi ${name}, I understand you need to update the delivery address. Since the shipment ${s?s.id:''} is currently ${s?s.status.toLowerCase():'in transit'}, I have flagged this to our dispatch team at ${s?s.location:'the current hub'} to modify the label before out-for-delivery. Please provide the complete new address.`;
+  }
+
+  // Missing item
+  if(lastCustMsg.includes('missing') || issue.includes('missing')) {
+    return `Dear ${name}, I apologize for the missing item in your order. I have raised an urgent ticket with the fulfillment center to check the packing footage. Can you please confirm the exact item that was missing from the invoice?`;
+  }
+
+  // Delay / Stuck
+  if(lastCustMsg.includes('delay') || lastCustMsg.includes('stuck') || lastCustMsg.includes('arrive') || issue.includes('delay') || (s && s.status==='Delayed')) {
+    const loc = s ? s.location : 'a transit hub';
+    const route = s ? s.route : 'its route';
+    const eta = s ? s.eta : 'shortly';
+    const id = s ? s.id : '';
+    return `Hi ${name}, I sincerely apologize for the delay. Your shipment ${id} is currently halted at ${loc} along ${route} due to unexpected operational bottlenecks. Rest assured, we have expedited the clearance and it is now expected to be delivered by ${eta}.`;
+  }
+
+  // General fallback using shipment status
+  if(s && s.status==='In Transit') return `Hi ${name}, your shipment ${s.id} is on the way! It is currently at ${s.location} via the ${s.route} route with an expected delivery of ${s.eta}. Thank you for your patience.`;
+  if(s && s.status==='Delivered') return `Dear ${name}, our records show shipment ${s.id} was delivered on ${s.eta}. If you haven't received it, please let us know so we can investigate with the delivery executive immediately.`;
+
+  return `Dear ${name}, thank you for contacting ResolveFlow. Our team is reviewing the details of your request and will provide a comprehensive update shortly.`;
+}
+
+function useAiSuggestion(){
+  const conv=conversations.find(c=>c.id===activeConvId);
+  const linkedShip=findShipmentForConv(conv);
+  const txt=generateAiSuggestion(conv,linkedShip);
+  const inp=document.getElementById('chat-inp');
+  if(inp) inp.value=txt;
+}
+
+function selectConv(id){activeConvId=id;const conv=conversations.find(c=>c.id===id);if(conv)conv.unread=0;renderInbox();}
+
+function sendChatReply(){
+  const inp=document.getElementById('chat-inp');
+  if(!inp||!inp.value.trim()) return;
+  const conv=conversations.find(c=>c.id===activeConvId);
+  conv.messages.push({role:'agent',text:inp.value.trim(),time:new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'})});
+  conv.lastMsg=inp.value.trim().substring(0,40);
+  inp.value='';
+  renderInbox();
+}
+
+function startSlaTimer(linkedCase){
+  if(slaTimers.inbox) clearInterval(slaTimers.inbox);
+  if(!linkedCase) return;
+  function updateTimer(){
+    const el=document.getElementById('sla-countdown');
+    if(!el){clearInterval(slaTimers.inbox);return;}
+    const diff=linkedCase.slaDue-Date.now();
+    if(diff<=0){el.textContent='BREACHED';el.style.color='var(--d)';return;}
+    const h=Math.floor(diff/3600000);const m=Math.floor((diff%3600000)/60000);const s=Math.floor((diff%60000)/1000);
+    el.textContent=`${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+    el.style.color=diff<1800000?'var(--d)':diff<3600000?'var(--w)':'var(--s)';
+  }
+  updateTimer();
+  slaTimers.inbox=setInterval(updateTimer,1000);
+}
+
+// ==================== CASES ====================
+function renderCases(){
+  const el=document.getElementById('page-cases');
+  el.innerHTML=`
+  <div class="page-hdr"><h1>${t('cases')}</h1><p>${cases.length} total cases · ${cases.filter(c=>c.status!=='Resolved').length} open</p></div>
+  <div class="tbl-wrap">
+    <div class="tbl-bar">
+      <div class="tbl-srch"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg><input placeholder="Search cases..." oninput="filterCases(this.value)" id="case-search"></div>
+      <select style="background:var(--bg);border:1px solid var(--bo);color:var(--t2);border-radius:6px;padding:6px 10px;font-size:12px;outline:none" onchange="filterCases(document.getElementById('case-search').value,this.value)">
+        <option value="">All Status</option><option>Open</option><option>In Progress</option><option>Escalated</option><option>Resolved</option>
+      </select>
+      <select style="background:var(--bg);border:1px solid var(--bo);color:var(--t2);border-radius:6px;padding:6px 10px;font-size:12px;outline:none">
+        <option value="">All Priority</option><option>critical</option><option>high</option><option>medium</option><option>low</option>
+      </select>
+      <span style="margin-left:auto;font-size:12px;color:var(--t2)">${cases.length} results</span>
+    </div>
+    <div style="overflow-x:auto">
+    <table class="tbl" id="cases-tbl">
+      <thead><tr>
+        <th>Case ID</th><th>Customer</th><th>Issue</th><th>${channelIcon('email')} Channel</th>
+        <th>${t('priorityLbl')}</th><th>${t('statusLbl')}</th><th>${t('agentLbl')}</th>
+        <th>Tracking</th><th>SLA</th><th>${t('createdLbl')}</th>
+      </tr></thead>
+      <tbody id="cases-tbody">${renderCasesRows(cases)}</tbody>
+    </table>
+    </div>
+      </div>
+  </div>
+  `;
+}
+
+function renderCasesRows(data){
+  return data.map(c=>`<tr onclick="openCaseDetail('${c.id}')" style="cursor:pointer;transition:background .2s" onmouseover="this.style.background='rgba(59,130,246,.04)'" onmouseout="this.style.background='transparent'">
+    <td><span style="color:var(--p);font-weight:700;font-family:monospace">${c.id}</span></td>
+    <td><div style="font-weight:500">${c.customer}</div><div style="font-size:11px;color:var(--t2)">${c.company}</div></td>
+    <td style="max-width:200px;white-space:normal;font-size:12.5px">${c.issue}</td>
+    <td><span style="font-size:13px">${channelIcon(c.channel)}</span> <span style="font-size:12px;color:var(--t2)">${c.channel}</span></td>
+    <td>${priorityBadge(c.priority)}</td>
+    <td>${statusBadge(c.status)}</td>
+    <td><div style="font-size:12.5px">${c.agent}</div></td>
+    <td><span style="color:var(--a);font-weight:600;font-family:monospace">${c.trackingId}</span></td>
+    <td style="font-size:12px;color:${(c.slaDue-Date.now())<3600000?'var(--d)':'var(--t2)'}">${fmtSla(c.slaDue)}</td>
+    <td style="font-size:12px;color:var(--t2)">${c.created}</td>
+  </tr>`).join('');
+}
+
+function filterCases(q,status=''){
+  const tbody=document.getElementById('cases-tbody');
+  if(!tbody) return;
+  const filtered=cases.filter(c=>{
+    const match=!q||(c.id+c.customer+c.issue+c.trackingId).toLowerCase().includes(q.toLowerCase());
+    const sMatch=!status||c.status===status;
+    return match&&sMatch;
+  });
+  tbody.innerHTML=renderCasesRows(filtered);
+}
+
+function openCaseDetail(id){
+  const c=cases.find(x=>x.id===id);
+  if(!c)return;
+  const p=document.getElementById('case-detail-panel');
+  const o=document.getElementById('cd-overlay');
+  const conv=conversations.find(x=>x.caseId===id);
+  const ship=shipments.find(x=>x.id===c.trackingId);
+  p.innerHTML=`
+  <div class="cd-hdr">
+    <div>
+      <div style="font-size:16px;font-weight:800;color:var(--t);font-family:monospace">${c.id}</div>
+      <div style="font-size:12px;color:var(--t2);margin-top:2px">${c.customer} &nbsp;·&nbsp; ${c.company}</div>
+    </div>
+    <button class="cd-close" onclick="closeCaseDetail()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+  </div>
+  <div class="cd-body">
+    <div style="display:flex;gap:10px;margin-bottom:20px">${statusBadge(c.status)}${priorityBadge(c.priority)}<span class="badge b-n">${c.channel}</span></div>
+    <div style="font-size:13px;font-weight:600;margin-bottom:6px">Subject</div>
+    <div style="font-size:14px;color:var(--t);margin-bottom:20px;line-height:1.5">${c.issue}</div>
+    <div style="background:var(--bg);border:1px solid var(--bo);border-radius:8px;padding:16px;margin-bottom:20px">
+      <div style="font-size:11px;font-weight:700;color:var(--t2);margin-bottom:8px">SHIPMENT CONTEXT</div>
+      ${ship?`<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div><div style="font-size:11px;color:var(--t2)">Tracking</div><div style="font-size:13px;font-family:monospace;color:var(--p)">${ship.id}</div></div>
+        <div><div style="font-size:11px;color:var(--t2)">Status</div><div style="font-size:13px">${statusBadge(ship.status)}</div></div>
+        <div><div style="font-size:11px;color:var(--t2)">Location</div><div style="font-size:13px">${ship.location}</div></div>
+        <div><div style="font-size:11px;color:var(--t2)">ETA</div><div style="font-size:13px">${ship.eta}</div></div>
+      </div>`:'<div style="font-size:13px;color:var(--t2)">No shipment linked</div>'}
+    </div>
+    <div style="font-size:13px;font-weight:600;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center"><span>Conversation History</span><button onclick="closeCaseDetail();navigateTo('inbox');setTimeout(()=>{activeConvId=${conv?conv.id:'null'};renderInbox()},50)" style="background:none;border:none;color:var(--p);font-size:12px;cursor:pointer;font-weight:600">Open in Inbox →</button></div>
+    <div style="display:flex;flex-direction:column;gap:12px;border-left:2px solid var(--bo);padding-left:14px;margin-left:6px">
+      ${conv?conv.messages.map(m=>`<div style="position:relative">
+        <div style="position:absolute;left:-21px;top:0;width:10px;height:10px;border-radius:50%;background:${m.role==='customer'?'var(--a)':'var(--p)'};border:2px solid var(--sf)"></div>
+        <div style="font-size:11.5px;font-weight:600;color:var(--t);margin-bottom:4px">${m.role==='customer'?conv.customer:'Agent ('+c.agent+')'} <span style="font-weight:400;color:var(--t2)">${m.time}</span></div>
+        <div style="font-size:13px;color:var(--t2);line-height:1.5;background:rgba(255,255,255,.03);padding:10px;border-radius:6px">${m.text}</div>
+      </div>`).join(''):'<div style="font-size:13px;color:var(--t2)">No messages yet</div>'}
+    </div>
+      </div>
+  </div>
+  `;
+  o.classList.add('open');
+  p.classList.add('open');
+}
+
+function closeCaseDetail(){
+  document.getElementById('cd-overlay').classList.remove('open');
+  document.getElementById('case-detail-panel').classList.remove('open');
+}
+
+// ==================== CUSTOMERS ====================
+function renderCustomers(){
+  const el=document.getElementById('page-customers');
+  el.innerHTML=`
+  <div class="page-hdr"><h1>${t('customers')}</h1><p>${customers.length} active customers</p></div>
+  <div class="tbl-wrap">
+    <div class="tbl-bar">
+      <div class="tbl-srch"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg><input placeholder="Search customers..."></div>
+    </div>
+    <table class="tbl"><thead><tr><th>Customer</th><th>Company</th><th>City</th><th>Total Cases</th><th>Open Cases</th><th>CSAT</th><th>Last Contact</th><th></th></tr></thead>
+    <tbody>${customers.map((c,i)=>`
+      <tr onclick="toggleCustDetail(${i})" style="cursor:pointer">
+        <td><div style="display:flex;align-items:center;gap:9px"><div style="width:28px;height:28px;border-radius:50%;background:${colorForIdx(i)};display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff">${c.name.split(' ').map(n=>n[0]).join('')}</div><div style="font-weight:600">${c.name}</div></div></td>
+        <td style="font-size:12.5px">${c.company}</td><td style="font-size:12.5px">${c.city}</td>
+        <td><span style="font-weight:600">${c.totalCases}</span></td>
+        <td>${c.openCases>0?`<span class="badge b-d">${c.openCases}</span>`:'<span class="badge b-s">0</span>'}</td>
+        <td><span style="font-weight:700;color:${c.csat>=4?'var(--s)':c.csat>=3?'var(--w)':'var(--d)'}">${c.csat} ★</span></td>
+        <td style="font-size:12px;color:var(--t2)">${c.lastContact}</td>
+        <td><span style="color:var(--p);font-size:12px">Details ›</span></td>
+      </tr>
+      <tr id="cust-detail-${i}" style="display:none"><td colspan="8" style="padding:0">
+        <div class="cust-detail">
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:14px">
+            <div><div style="font-size:11px;color:var(--t2);font-weight:600;margin-bottom:4px">EMAIL</div><div style="font-size:13px">${c.email}</div></div>
+            <div><div style="font-size:11px;color:var(--t2);font-weight:600;margin-bottom:4px">PHONE</div><div style="font-size:13px">${c.phone}</div></div>
+            <div><div style="font-size:11px;color:var(--t2);font-weight:600;margin-bottom:4px">TOTAL CASES</div><div style="font-size:22px;font-weight:800;color:var(--t)">${c.totalCases}</div></div>
+            <div><div style="font-size:11px;color:var(--t2);font-weight:600;margin-bottom:4px">OPEN CASES</div><div style="font-size:22px;font-weight:800;color:${c.openCases>0?'var(--d)':'var(--s)'}">${c.openCases}</div></div>
+          </div>
+          <div style="font-size:13px;font-weight:600;margin-bottom:10px">Recent Cases</div>
+          ${cases.filter(cs=>cs.customer===c.name).slice(0,3).map(cs=>`<div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.04)"><span style="color:var(--p);font-weight:700;font-family:monospace">${cs.id}</span><span style="flex:1;font-size:13px">${cs.issue}</span>${statusBadge(cs.status)}${priorityBadge(cs.priority)}</div>`).join('')}
+        </div>
+      </td></tr>`).join('')}
+    </tbody></table>
+      </div>
+  </div>
+  `;
+}
+
+function toggleCustDetail(i){
+  const row=document.getElementById(`cust-detail-${i}`);
+  if(row) row.style.display=row.style.display==='none'?'table-row':'none';
+}
+
+// ==================== SHIPMENTS ====================
+function renderShipments(){
+  const el=document.getElementById('page-shipments');
+  el.innerHTML=`
+  <div class="page-hdr"><h1>${t('shipments')}</h1><p>${shipments.length} shipments tracked</p></div>
+  <div class="tbl-wrap">
+    <div class="tbl-bar">
+      <div class="tbl-srch"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg><input placeholder="Search shipments..." oninput="filterShipments(this.value)"></div>
+      <select style="background:var(--bg);border:1px solid var(--bo);color:var(--t2);border-radius:6px;padding:6px 10px;font-size:12px;outline:none" onchange="filterShipments('',this.value)">
+        <option value="">All Status</option><option>In Transit</option><option>Delivered</option><option>Delayed</option><option>Out for Delivery</option><option>Processing</option>
+      </select>
+    </div>
+    <table class="tbl"><thead><tr>
+      <th>${t('trackingId')}</th><th>Customer</th><th>${t('statusLbl')}</th><th>Location</th><th>${t('routeLbl')}</th><th>Type</th><th>${t('weightLbl')}</th><th>${t('etaLbl')}</th><th></th>
+    </tr></thead>
+    <tbody id="ship-tbody">${renderShipRows(shipments)}</tbody></table>
+      </div>
+  </div>
+  `;
+}
+
+function renderShipRows(data){
+  return data.map((s,i)=>`
+  <tr onclick="toggleShipDetail('${s.id}')" style="cursor:pointer;transition:background .2s" onmouseover="this.style.background='rgba(59,130,246,.04)'" onmouseout="this.style.background='transparent'">
+    <td><span style="color:var(--p);font-weight:700;font-family:monospace">${s.id}</span></td>
+    <td><div style="font-weight:500;font-size:13px">${s.customer}</div><div style="font-size:11px;color:var(--t2)">${s.company}</div></td>
+    <td>${statusBadge(s.status)}</td>
+    <td style="font-size:13px">${s.location}</td>
+    <td style="font-size:12.5px;color:var(--t2)">${s.route}</td>
+    <td><span class="badge b-n">${s.type}</span></td>
+    <td style="font-size:13px">${s.weight} kg</td>
+    <td style="font-size:13px;font-weight:500">${s.eta}</td>
+    <td><span style="color:var(--p);font-size:12px">›</span></td>
+  </tr>
+  <tr id="ship-detail-${s.id}" style="display:none"><td colspan="9" style="padding:0">
+    <div style="background:rgba(59,130,246,.04);border-left:2px solid var(--p);padding:20px">
+      <div style="display:flex;align-items:center;justify-content:space-between;position:relative;margin-bottom:24px;max-width:550px">
+        <div style="position:absolute;top:12px;left:20px;right:20px;height:2px;background:rgba(255,255,255,.1);z-index:0"></div>
+        ${['Processing','In Transit','Out for Delivery','Delivered'].map((step,idx)=>{
+           const steps=['Processing','In Transit','Out for Delivery','Delivered'];
+           const currIdx=steps.indexOf(s.status==='Delayed'?'In Transit':s.status);
+           const active=idx<=(currIdx===-1?0:currIdx);
+           return `<div style="position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:8px">
+             <div style="width:26px;height:26px;border-radius:50%;background:${active?'var(--p)':'var(--bg)'};border:2px solid ${active?'var(--p)':'var(--bo)'};display:flex;align-items:center;justify-content:center;color:${active?'#fff':'var(--t2)'};font-size:12px;font-weight:700">${active?'✓':idx+1}</div>
+             <div style="font-size:11.5px;font-weight:600;color:${active?'var(--t)':'var(--t2)'}">${step}</div>
+               </div>
+  </div>
+  `;
+        }).join('')}
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:16px;background:var(--bg);padding:12px;border-radius:8px">
+        <div><div style="font-size:11px;color:var(--t2);font-weight:700;margin-bottom:4px">TYPE</div><div style="font-size:13px">${s.type}</div></div>
+        <div><div style="font-size:11px;color:var(--t2);font-weight:700;margin-bottom:4px">WEIGHT</div><div style="font-size:13px">${s.weight} kg</div></div>
+        <div><div style="font-size:11px;color:var(--t2);font-weight:700;margin-bottom:4px">ROUTE</div><div style="font-size:13px">${s.route}</div></div>
+        <div><div style="font-size:11px;color:var(--t2);font-weight:700;margin-bottom:4px">CURRENT</div><div style="font-size:13px">${s.location}</div></div>
+        <div><div style="font-size:11px;color:var(--t2);font-weight:700;margin-bottom:4px">ETA</div><div style="font-size:13px;font-weight:700;color:var(--p)">${s.eta}</div></div>
+      </div>
+    </div>
+  </td></tr>`).join('');
+}
+
+function toggleShipDetail(id){const r=document.getElementById(`ship-detail-${id}`);if(r)r.style.display=r.style.display==='none'?'table-row':'none';}
+function filterShipments(q,status=''){const tbody=document.getElementById('ship-tbody');if(!tbody)return;const f=shipments.filter(s=>(!q||(s.id+s.customer+s.location+s.route).toLowerCase().includes(q.toLowerCase()))&&(!status||s.status===status));tbody.innerHTML=renderShipRows(f);}
+
+// ==================== AUTOMATION ====================
+function renderAutomation(){
+  const el=document.getElementById('page-automation');
+  const rules=[
+    {name:'Delay Alert Notification',desc:'Automatically notify customer when shipment delay exceeds 12 hours',active:true,runs:847,triggered:'2m ago',
+      flow:[{type:'fn-t',label:'Trigger: Shipment Status'},{type:'fn-c',label:'Delay > 12h'},{type:'fn-a',label:'WhatsApp + Email Customer'}]},
+    {name:'Damage Complaint Routing',desc:'Route fragile/damage cases directly to warehouse quality team',active:true,runs:234,triggered:'15m ago',
+      flow:[{type:'fn-t',label:'Trigger: New Case'},{type:'fn-c',label:'Issue = Damage'},{type:'fn-a',label:'Assign Warehouse Team'}]},
+    {name:'SLA Breach Escalation',desc:'Auto-escalate to supervisor 30 minutes before SLA breach',active:false,runs:156,triggered:'1h ago',
+      flow:[{type:'fn-t',label:'Trigger: SLA Timer'},{type:'fn-c',label:'Time < 30m'},{type:'fn-a',label:'Escalate to Supervisor'}]}
+  ];
+  el.innerHTML=`
+  <div class="page-hdr"><h1>${t('automation')}</h1><p>Manage intelligent workflow rules and automation triggers</p></div>
+  <div style="display:flex;gap:12px;margin-bottom:20px">
+    <div class="card" style="padding:16px;flex:1;text-align:center"><div style="font-size:22px;font-weight:800;color:var(--s)">2</div><div style="font-size:12px;color:var(--t2);margin-top:3px">Active Rules</div></div>
+    <div class="card" style="padding:16px;flex:1;text-align:center"><div style="font-size:22px;font-weight:800;color:var(--p)">1,237</div><div style="font-size:12px;color:var(--t2);margin-top:3px">Triggers This Week</div></div>
+    <div class="card" style="padding:16px;flex:1;text-align:center"><div style="font-size:22px;font-weight:800;color:var(--a)">68%</div><div style="font-size:12px;color:var(--t2);margin-top:3px">Resolution Rate</div></div>
+    <div class="card" style="padding:16px;flex:1;text-align:center"><div style="font-size:22px;font-weight:800;color:var(--w)">3.2m</div><div style="font-size:12px;color:var(--t2);margin-top:3px">Avg Response Time</div></div>
+  </div>
+  ${rules.map((r,ri)=>`
+  <div class="wf-card">
+    <div class="wf-hdr">
+      <div class="wf-meta"><div class="wf-title">${r.name}</div><div class="wf-desc">${r.desc}</div></div>
+      <label class="tog-wrap"><input type="checkbox" ${r.active?'checked':''} onchange="this.closest('.wf-card').querySelector('.wf-status').textContent=this.checked?'Active':'Paused'"><div class="tog-sl"></div></label>
+    </div>
+    <div class="wf-flow">
+      ${r.flow.map((f,fi)=>`${fi>0?`<span class="farrow">→</span>`:''}<div class="fn ${f.type}"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>${f.label}</div>`).join('')}
+    </div>
+    <div class="wf-stats">
+      <div class="wf-stat">Status: <span class="wf-status" style="color:${r.active?'var(--s)':'var(--t2)'}">${r.active?'Active':'Paused'}</span></div>
+      <div class="wf-stat">Runs: <span>${r.runs}</span></div>
+      <div class="wf-stat">Last triggered: <span>${r.triggered}</span></div>
+    </div>
+  </div>`).join('')}`;
+}
+
+// ==================== ANALYTICS ====================
+function renderAnalytics(){
+  const el=document.getElementById('page-analytics');
+  el.innerHTML=`
+  <div class="page-hdr"><h1>${t('analytics')}</h1><p>Performance metrics and operational intelligence</p></div>
+  <div class="kpi-grid">
+    <div class="kpi-card"><div class="kpi-top"><div class="kpi-ic" style="background:rgba(59,130,246,.12);color:var(--p)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div><span class="kpi-trend" style="background:rgba(34,197,94,.1);color:var(--s)">↑ 12%</span></div><div class="kpi-val">1,847</div><div class="kpi-lbl">Total Cases This Month</div></div>
+    <div class="kpi-card"><div class="kpi-top"><div class="kpi-ic" style="background:rgba(34,197,94,.12);color:var(--s)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></div><span class="kpi-trend" style="background:rgba(34,197,94,.1);color:var(--s)">↑ 8%</span></div><div class="kpi-val">1,421</div><div class="kpi-lbl">Cases Resolved</div></div>
+    <div class="kpi-card"><div class="kpi-top"><div class="kpi-ic" style="background:rgba(245,158,11,.12);color:var(--w)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><span class="kpi-trend" style="background:rgba(34,197,94,.1);color:var(--s)">↓ 18%</span></div><div class="kpi-val">2.4h</div><div class="kpi-lbl">Avg Resolution Time</div></div>
+    <div class="kpi-card"><div class="kpi-top"><div class="kpi-ic" style="background:rgba(139,92,246,.12);color:var(--a)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div><span class="kpi-trend" style="background:rgba(34,197,94,.1);color:var(--s)">↑ 0.2</span></div><div class="kpi-val">4.3</div><div class="kpi-lbl">Average CSAT</div></div>
+    <div class="kpi-card"><div class="kpi-top"><div class="kpi-ic" style="background:rgba(34,197,94,.12);color:var(--s)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div><span class="kpi-trend" style="background:rgba(34,197,94,.1);color:var(--s)">↑ 5%</span></div><div class="kpi-val">87%</div><div class="kpi-lbl">SLA Compliance</div></div>
+  </div>
+  <div class="analytics-2col">
+    <div class="chart-card"><div class="chart-ttl">Resolution Time Trend (30 days)</div><div class="chart-wrapper"><canvas id="chart-res-trend"></canvas></div></div>
+    <div class="chart-card"><div class="chart-ttl">Cases by Channel</div><div class="chart-wrapper"><canvas id="chart-channel"></canvas></div></div>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+    <div class="card" style="padding:20px">
+      <div style="font-size:13px;font-weight:700;margin-bottom:16px">Agent Performance</div>
+      ${agents.map((a,i)=>`<div class="agent-row">
+        <div class="ag-av" style="background:${a.color}">${a.initials}</div>
+        <div style="flex:1;min-width:0">
+          <div class="ag-name">${a.name}</div>
+          <div class="ag-stat">${a.resolved} resolved · ${a.avg} avg · CSAT ${a.csat}</div>
+          <div class="ag-bar-wrap" style="margin-top:5px"><div class="ag-bar-bg"><div class="ag-bar-fill" style="width:${a.load}%"></div></div></div>
+        </div>
+        <div style="font-size:12px;color:var(--t2);text-align:right">${a.load}%</div>
+      </div>`).join('')}
+    </div>
+    <div class="card" style="padding:20px">
+      <div style="font-size:13px;font-weight:700;margin-bottom:16px">Route Delay Analysis</div>
+      ${[{route:'Chennai → Bangalore',delay:'34%',cases:28},{route:'Hyderabad → Kolkata',delay:'28%',cases:22},{route:'Mumbai → Delhi',delay:'21%',cases:41},{route:'Delhi → Lucknow',delay:'19%',cases:17},{route:'Pune → Ahmedabad',delay:'14%',cases:12}].map(r=>`
+      <div class="route-row">
+        <div><div style="font-size:13px;font-weight:500;color:var(--t)">${r.route}</div><div style="font-size:11px;color:var(--t2);margin-top:2px">${r.cases} cases</div></div>
+        <div style="text-align:right"><div style="font-size:14px;font-weight:700;color:${parseFloat(r.delay)>25?'var(--d)':parseFloat(r.delay)>18?'var(--w)':'var(--s)'}">${r.delay}</div><div style="font-size:11px;color:var(--t2)">delay rate</div></div>
+      </div>`).join('')}
+    </div>
+      </div>
+  </div>
+  `;
+  setTimeout(()=>{
+    destroyChart('chart-res-trend');destroyChart('chart-channel');
+    const cfg2={color:'rgba(255,255,255,.06)',tickColor:'rgba(148,163,184,.6)',font:{family:'Inter',size:11}};
+    const gc2={responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{color:cfg2.color},ticks:{color:cfg2.tickColor,font:cfg2.font}},y:{grid:{color:cfg2.color},ticks:{color:cfg2.tickColor,font:cfg2.font}}}};
+    chartInstances['chart-res-trend']=new Chart(document.getElementById('chart-res-trend'),{type:'line',data:{labels:Array.from({length:10},(_,i)=>['Mar 4','Mar 6','Mar 8','Mar 10','Mar 12','Mar 14','Mar 16','Mar 18','Mar 20','Mar 22'][i]),datasets:[{data:[3.2,2.9,3.5,2.7,2.4,3.1,2.2,2.8,2.1,2.4],borderColor:'#3B82F6',backgroundColor:'rgba(59,130,246,.12)',fill:true,tension:.4,pointRadius:3}]},options:{...gc2}});
+    chartInstances['chart-channel']=new Chart(document.getElementById('chart-channel'),{type:'bar',data:{labels:['Email','WhatsApp','Chat','Voice'],datasets:[{data:[48,28,16,8],backgroundColor:['#3B82F6','#22C55E','#8B5CF6','#F59E0B'],borderRadius:4,borderSkipped:false}]},options:{...gc2}});
+  },50);
+}
+
+
+// ==================== AI INSIGHTS ====================
+function renderAiInsights(){
+  const el=document.getElementById('page-ai-insights');
+  el.innerHTML=`
+  <div class="page-hdr"><h1>${t('aiInsights')}</h1><p>AI-generated operational intelligence and route analysis</p></div>
+  <div class="ins-grid">
+    <div class="ins-card"><div class="ins-ttl">Chennai \u2192 Bangalore Route Alert</div><div class="ins-sub">34% delay rate detected over the past 7 days. 28 cases linked to this route. Primary causes: NH-44 construction, checkpoint congestion.</div><div style="display:flex;flex-direction:column;gap:6px">${[{r:'Chennai → Bangalore',d:34,c:'var(--d)'},{r:'Hyderabad → Kolkata',d:28,c:'var(--d)'},{r:'Mumbai → Delhi',d:21,c:'var(--w)'},{r:'Delhi → Lucknow',d:19,c:'var(--w)'},{r:'Pune → Ahmedabad',d:14,c:'var(--s)'}].map(x=>`<div class="route-row"><span style="font-size:13px">${x.r}</span><span style="font-weight:700;color:${x.c}">${x.d}%</span></div>`).join('')}</div></div>
+    <div class="ins-card"><div class="ins-ttl">Fragile Shipment Damage Spike</div><div class="ins-sub">Damage complaints for fragile items increased 44% this week. Analysis shows improper handling at 3 redistribution hubs.</div><div class="chart-wrapper"><canvas id="chart-damage"></canvas></div></div>
+    <div class="ins-card"><div class="ins-ttl">Customer Sentiment Trend</div><div class="ins-sub">Overall CSAT declined from 4.6 to 4.3 over 14 days. Delay complaints are the primary driver.</div><div class="chart-wrapper"><canvas id="chart-sentiment"></canvas></div></div>
+    <div class="ins-card"><div class="ins-ttl">Peak Complaint Hours</div><div class="ins-sub">Complaint volume spikes at 10 AM and 5 PM. Recommend additional agent coverage during these windows.</div><div class="chart-wrapper"><canvas id="chart-hours"></canvas></div></div>
+  </div>
+  <div style="font-size:13px;font-weight:700;margin-bottom:12px"> AI Recommendations</div>
+  <div class="ai-rec-box"><div class="ai-rec-hdr"> High Priority Action</div><div class="ai-rec-txt">Reroute all Chennai \u2192 Bangalore shipments via alternate NH-75 corridor for the next 72 hours. Expected delay reduction: 28%. 12 active shipments can be rerouted immediately.</div></div>
+  <div class="ai-rec-box"><div class="ai-rec-hdr"> Packaging Alert</div><div class="ai-rec-txt">Mandate double-padding protocol for all fragile items dispatched from Mumbai Hub. The 3 flagged staff members at Nagpur redistribution center require immediate retraining.</div></div>
+  <div class="ai-rec-box"><div class="ai-rec-hdr"> Staffing Recommendation</div><div class="ai-rec-txt">Add 2 additional agents on Monday and Friday 9\u201311 AM shifts. Complaint volume is 62% higher on these windows, causing SLA pressure on Priya Sharma and Karthik Rao.</div>    </div>
+  </div>
+  `;
+  setTimeout(()=>{
+    destroyChart('chart-damage');destroyChart('chart-sentiment');destroyChart('chart-hours');
+    const gOpts={responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{color:'rgba(255,255,255,.06)'},ticks:{color:'rgba(148,163,184,.6)',font:{family:'Inter',size:10}}},y:{grid:{color:'rgba(255,255,255,.06)'},ticks:{color:'rgba(148,163,184,.6)',font:{family:'Inter',size:10}}}}};
+    chartInstances['chart-damage']=new Chart(document.getElementById('chart-damage'),{type:'bar',data:{labels:['Mar 7','Mar 8','Mar 9','Mar 10','Mar 11','Mar 12','Mar 13'],datasets:[{data:[8,9,11,13,15,14,18],backgroundColor:'rgba(239,68,68,.7)',borderRadius:3,borderSkipped:false}]},options:{...gOpts}});
+    chartInstances['chart-sentiment']=new Chart(document.getElementById('chart-sentiment'),{type:'line',data:{labels:['Feb 28','Mar 3','Mar 6','Mar 9','Mar 12','Mar 13'],datasets:[{data:[4.6,4.5,4.4,4.3,4.3,4.3],borderColor:'#8B5CF6',backgroundColor:'rgba(139,92,246,.1)',fill:true,tension:.4,pointRadius:3}]},options:{...gOpts}});
+    chartInstances['chart-hours']=new Chart(document.getElementById('chart-hours'),{type:'bar',data:{labels:['8A','9A','10A','11A','12P','1P','2P','3P','4P','5P','6P'],datasets:[{data:[12,18,34,22,15,11,13,16,20,31,18],backgroundColor:['rgba(59,130,246,.6)','rgba(59,130,246,.6)','rgba(239,68,68,.7)','rgba(59,130,246,.6)','rgba(59,130,246,.6)','rgba(59,130,246,.6)','rgba(59,130,246,.6)','rgba(59,130,246,.6)','rgba(59,130,246,.6)','rgba(239,68,68,.7)','rgba(59,130,246,.6)'],borderRadius:3,borderSkipped:false}]},options:{...gOpts}});
+  },50);
+}
+
+// ==================== KNOWLEDGE BASE ====================
+function renderKnowledge(){
+  const el=document.getElementById('page-knowledge');
+  el.innerHTML=`
+  <div class="page-hdr"><h1>${t('knowledge')}</h1><p>${articles.length} support articles · Searchable knowledge hub for agents and customers</p></div>
+  <div style="display:flex;gap:10px;margin-bottom:20px"><div class="tbl-srch" style="max-width:320px"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg><input placeholder="Search articles..."></div>${['All','Claims','Tracking','Delivery','Packaging','Compliance','Refunds'].map(c=>`<button style="padding:5px 12px;border-radius:6px;border:1px solid var(--bo);background:rgba(255,255,255,.04);color:var(--t2);font-size:12px;cursor:pointer;font-family:'Inter',sans-serif">${c}</button>`).join('')}</div>
+  <div class="kb-grid">${articles.map(a=>`<div class="kb-card"><div class="kb-cat">${a.cat}</div><div class="kb-title">${a.title}</div><div class="kb-exc">${a.excerpt}</div><div class="kb-meta"><span>${a.readTime} read &nbsp;·&nbsp; ${a.views.toLocaleString()} views</span><button class="kb-send">${t('sendToCustomer')}</button></div></div>`).join('')}    </div>
+  </div>
+  `;
+}
+
+// ==================== COMMAND CENTER ====================
+function renderCommand(){
+  const el=document.getElementById('page-command');
+  const hubs=[{name:'Delhi',x:225,y:148},{name:'Mumbai',x:152,y:305},{name:'Chennai',x:272,y:440},{name:'Bangalore',x:232,y:418},{name:'Hyderabad',x:258,y:348},{name:'Kolkata',x:362,y:252},{name:'Pune',x:162,y:320},{name:'Ahmedabad',x:150,y:234},{name:'Jaipur',x:200,y:188},{name:'Lucknow',x:278,y:190}];
+  const routes=[{a:0,b:1,color:'#3B82F6',delayed:false},{a:2,b:3,color:'#8B5CF6',delayed:false},{a:4,b:5,color:'#EF4444',delayed:true},{a:0,b:5,color:'#22C55E',delayed:false},{a:1,b:7,color:'#F59E0B',delayed:true},{a:3,b:4,color:'#8B5CF6',delayed:false}];
+  const delayedHubs=[4,5];
+  el.innerHTML=`
+  <div class="page-hdr" style="flex-shrink:0"><h1>${t('command')}</h1><p>Live logistics operations view — ${shipments.length} tracked shipments · ${cases.filter(c=>c.status!=='Resolved').length} active cases</p></div>
+    </div>
+<style>
+/* COMMAND CENTER RE-DESIGN */
+.cmd-dash-grid { display:flex; flex-direction:column; gap:16px; flex:1; min-height:0; }
+.cmd-metrics { display:grid; grid-template-columns:repeat(5, 1fr); gap:12px; flex-shrink:0; }
+.cs-ic { width:32px; height:32px; border-radius:8px; display:flex; align-items:center; justify-content:center; }
+.cs-v { font-size:20px; font-weight:800; color:var(--t); }
+.cs-l { font-size:11px; color:var(--t2); margin-top:2px; }
+
+.cmd-main-body { display:grid; grid-template-columns:300px 1fr 340px; gap:16px; flex:1; min-height:0; }
+.cmd-panel { background:var(--c); border:1px solid var(--bo); border-radius:12px; display:flex; flex-direction:column; overflow:hidden; }
+.cmd-ttl { padding:14px 16px; border-bottom:1px solid var(--bo); font-size:12px; font-weight:700; color:var(--t2); text-transform:uppercase; letter-spacing:0.04em; display:flex; align-items:center; justify-content:space-between; flex-shrink:0;}
+
+/* Feed Left */
+.feed-panel { background:rgba(30,41,59,0.3); }
+.feed-scroller { flex:1; overflow-y:auto; padding:0 16px; }
+.feed-scroller::-webkit-scrollbar { width:0; }
+.f-item { display:flex; gap:12px; padding:12px 0; border-bottom:1px solid rgba(255,255,255,0.04); animation:fadeIn 0.5s ease-out forwards; opacity:0; }
+.f-item:nth-child(1){animation-delay:0s}
+.f-item:nth-child(2){animation-delay:0.1s}
+.f-item:nth-child(3){animation-delay:0.2s}
+.f-item:nth-child(4){animation-delay:0.3s}
+.f-item:nth-child(5){animation-delay:0.4s}
+.f-item:nth-child(6){animation-delay:0.5s}
+.f-item:nth-child(7){animation-delay:0.6s}
+.f-item:nth-child(8){animation-delay:0.7s}
+.f-item:last-child { border-bottom:none; }
+.f-ic { font-size:14px; margin-top:2px; filter:grayscale(0.2); }
+.f-t { font-size:12.5px; color:var(--t); line-height:1.4; }
+.f-tm { font-size:10.5px; color:var(--t2); margin-top:4px; }
+@keyframes fadeIn { to{opacity:1;} }
+
+/* Flow Board Center */
+.flow-board { padding:24px 20px; flex:1; overflow-y:auto; display:flex; flex-direction:column; gap:20px; }
+.fl-rt { background:rgba(15,23,42,0.4); border:1px solid rgba(255,255,255,0.03); padding:16px 20px; border-radius:10px; }
+.fl-hdr { display:flex; justify-content:space-between; margin-bottom:14px; align-items:center; }
+.fl-nm { font-size:14px; font-weight:600; color:var(--t); }
+.fl-cnt { font-size:12px; color:var(--t2); }
+.fl-trk { position:relative; height:6px; background:rgba(255,255,255,0.05); border-radius:3px; display:flex; align-items:center; }
+.fl-line { position:absolute; left:0; top:0; height:100%; border-radius:3px; opacity:0.4; width:100%; }
+.fl-node { width:10px; height:10px; border-radius:50%; background:var(--t2); position:absolute; border:2px solid var(--c); z-index:2; }
+.fn-start { left:-2px; }
+.fn-end { right:-2px; }
+.fl-dot { width:8px; height:8px; border-radius:50%; background:#fff; position:absolute; z-index:5; box-shadow:0 0 6px rgba(255,255,255,0.8); animation:moveDot 5s linear infinite; cursor:pointer;}
+.fl-dot:hover { transform:scale(1.5); }
+.fl-halt { animation:none !important; box-shadow:0 0 8px var(--d); }
+
+@keyframes moveDot {
+  0% { transform:translateX(-10px); opacity:0; }
+  10% { opacity:1; }
+  90% { opacity:1; }
+  100% { transform:translateX(80px); opacity:0; }
+}
+
+/* Risks Right */
+.risk-list { padding:16px; display:flex; flex-direction:column; gap:12px; overflow-y:auto; flex:1; }
+.rk-card { padding:14px; border-radius:8px; display:flex; gap:12px; border-left:3px solid transparent; background:rgba(15,23,42,0.6); }
+.rk-crit { border-left-color:var(--d); background:rgba(239,68,68,0.05); border-top:1px solid rgba(239,68,68,0.1); border-right:1px solid rgba(239,68,68,0.1); border-bottom:1px solid rgba(239,68,68,0.1); }
+.rk-warn { border-left-color:var(--w); border-top:1px solid rgba(245,158,11,0.05); border-right:1px solid rgba(245,158,11,0.05); border-bottom:1px solid rgba(245,158,11,0.05);}
+.rk-ic { font-size:16px; margin-top:2px; }
+.rk-b { flex:1; }
+.rk-loc { font-size:13px; font-weight:600; color:var(--t); margin-bottom:4px; }
+.rk-desc { font-size:12px; color:var(--t2); line-height:1.4; margin-bottom:6px; }
+.rk-tm { font-size:10px; color:var(--t2); font-weight:500; opacity:0.7; }
+
+/* Bottom Strip */
+.cmd-perf-strip { display:flex; background:var(--c); border:1px solid var(--bo); border-radius:10px; padding:12px 20px; justify-content:space-between; flex-shrink:0; }
+.prf-item { display:flex; flex-direction:column; border-right:1px solid rgba(255,255,255,0.05); padding-right:30px; }
+.prf-item:last-child { border-right:none; padding-right:0; }
+.prf-l { font-size:11px; color:var(--t2); text-transform:uppercase; letter-spacing:0.04em; margin-bottom:4px;}
+.prf-v { font-size:16px; font-weight:700; color:var(--t); display:flex; align-items:baseline; gap:6px; }
+
+</style>
+<div class="cmd-dash-grid">
+  <!-- Top Metrics -->
+  <div class="cmd-metrics">
+    <div class="cmd-stat"><div class="cs-ic" style="color:var(--p);background:rgba(59,130,246,.1)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/></svg></div><div><div class="cs-v">${shipments.length}</div><div class="cs-l">Active Shipments</div></div></div>
+    <div class="cmd-stat"><div class="cs-ic" style="color:var(--w);background:rgba(245,158,11,.1)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><div><div class="cs-v">${shipments.filter(s=>s.status==='Delayed').length}</div><div class="cs-l">Delayed Shipments</div></div></div>
+    <div class="cmd-stat"><div class="cs-ic" style="color:var(--s);background:rgba(34,197,94,.1)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></div><div><div class="cs-v">${shipments.filter(s=>s.status==='Delivered').length}</div><div class="cs-l">Resolved Deliveries Today</div></div></div>
+    <div class="cmd-stat"><div class="cs-ic" style="color:var(--t);background:rgba(255,255,255,.05)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg></div><div><div class="cs-v">${cases.length}</div><div class="cs-l">Open Customer Cases</div></div></div>
+    <div class="cmd-stat"><div class="cs-ic" style="color:var(--d);background:rgba(239,68,68,.1)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div><div><div class="cs-v">4</div><div class="cs-l">AI Risk Alerts</div></div></div>
+  </div>
+
+  <div class="cmd-main-body">
+    <!-- Left Operations Feed -->
+    <div class="cmd-panel feed-panel">
+      <div class="cmd-ttl">Operations Feed <div class="live-dot"></div></div>
+      <div class="feed-scroller">
+        <div class="f-item"><div class="f-ic">��</div><div class="f-b"><div class="f-t">Shipment RF-2301 departed Mumbai hub</div><div class="f-tm">Just now</div></div></div>
+        <div class="f-item"><div class="f-ic">⚠️</div><div class="f-b"><div class="f-t">Shipment RF-2391 delayed at Hyderabad checkpoint</div><div class="f-tm">2m ago</div></div></div>
+        <div class="f-item"><div class="f-ic">📝</div><div class="f-b"><div class="f-t">Customer complaint created for damaged shipment</div><div class="f-tm">5m ago</div></div></div>
+        <div class="f-item"><div class="f-ic">⏱️</div><div class="f-b"><div class="f-t" style="color:var(--d)">SLA breach warning for case CS-1054</div><div class="f-tm">12m ago</div></div></div>
+        <div class="f-item"><div class="f-ic">✅</div><div class="f-b"><div class="f-t">RF-2200 marked as Delivered in Delhi</div><div class="f-tm">15m ago</div></div></div>
+        <div class="f-item"><div class="f-ic">🚚</div><div class="f-b"><div class="f-t">Fleet 4A arrived at Chennai Sorting Center</div><div class="f-tm">18m ago</div></div></div>
+        <div class="f-item"><div class="f-ic">🤖</div><div class="f-b"><div class="f-t">AI reprioritized 12 tickets for Bangalore hub</div><div class="f-tm">22m ago</div></div></div>
+        <div class="f-item"><div class="f-ic">📦</div><div class="f-b"><div class="f-t">Shipment RF-1982 processed at Kolkata</div><div class="f-tm">25m ago</div></div></div>
+      </div>
+    </div>
+
+    <!-- Central Shipment Flow Board -->
+    <div class="cmd-panel flow-panel">
+      <div class="cmd-ttl">Live Shipment Flow Board</div>
+      <div class="flow-board">
+        
+        <!-- Route 1 -->
+        <div class="fl-rt">
+          <div class="fl-hdr"><span class="fl-nm">Delhi → Mumbai</span><span class="fl-cnt">12 shipments</span></div>
+          <div class="fl-trk">
+            <div class="fl-line" style="background:var(--w)"></div>
+            <div class="fl-node fn-start"></div><div class="fl-node fn-end"></div>
+            <div class="fl-dot" style="left:20%;animation-delay:0s"></div>
+            <div class="fl-dot" style="left:40%;animation-delay:-1s"></div>
+            <div class="fl-dot" style="left:60%;animation-delay:-2s"></div>
+            <div class="fl-dot" style="left:75%;animation-delay:-3s"></div>
+          </div>
+        </div>
+
+        <!-- Route 2 -->
+        <div class="fl-rt">
+          <div class="fl-hdr"><span class="fl-nm">Delhi → Kolkata</span><span class="fl-cnt">24 shipments</span></div>
+          <div class="fl-trk">
+            <div class="fl-line" style="background:var(--s)"></div>
+            <div class="fl-node fn-start"></div><div class="fl-node fn-end"></div>
+            <div class="fl-dot" style="left:15%;animation-delay:-0.5s"></div>
+            <div class="fl-dot" style="left:35%;animation-delay:-1.2s"></div>
+            <div class="fl-dot" style="left:55%;animation-delay:-2.4s"></div>
+            <div class="fl-dot" style="left:85%;animation-delay:-3.1s"></div>
+          </div>
+        </div>
+
+        <!-- Route 3 -->
+        <div class="fl-rt">
+          <div class="fl-hdr"><span class="fl-nm">Mumbai → Ahmedabad</span><span class="fl-cnt">18 shipments</span></div>
+          <div class="fl-trk">
+            <div class="fl-line" style="background:var(--s)"></div>
+            <div class="fl-node fn-start"></div><div class="fl-node fn-end"></div>
+            <div class="fl-dot" style="left:30%;animation-delay:-0.2s"></div>
+            <div class="fl-dot" style="left:50%;animation-delay:-1.8s"></div>
+          </div>
+        </div>
+
+        <!-- Route 4 -->
+        <div class="fl-rt">
+          <div class="fl-hdr"><span class="fl-nm">Hyderabad → Kolkata</span><span class="fl-cnt" style="color:var(--w)">42 shipments</span></div>
+          <div class="fl-trk">
+            <div class="fl-line" style="background:var(--w)"></div>
+            <div class="fl-node fn-start"></div><div class="fl-node fn-end"></div>
+            <div class="fl-dot" style="left:10%;animation-delay:0s"></div>
+            <div class="fl-dot" style="left:25%;animation-delay:-1s"></div>
+            <div class="fl-dot" style="left:45%;animation-delay:-2s"></div>
+            <div class="fl-dot" style="left:65%;animation-delay:-3s"></div>
+            <div class="fl-dot" style="left:80%;animation-delay:-4s"></div>
+          </div>
+        </div>
+
+        <!-- Route 5 -->
+        <div class="fl-rt">
+          <div class="fl-hdr"><span class="fl-nm">Chennai → Bangalore</span><span class="fl-cnt" style="color:var(--d)">8 shipments (HALTED)</span></div>
+          <div class="fl-trk">
+            <div class="fl-line" style="background:var(--d)"></div>
+            <div class="fl-node fn-start"></div><div class="fl-node fn-end"></div>
+            <div class="fl-dot fl-halt" style="left:40%;background:var(--d)"></div>
+            <div class="fl-dot fl-halt" style="left:45%;background:var(--d)"></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Right Risk & Alert Monitor -->
+    <div class="cmd-panel risk-panel">
+      <div class="cmd-ttl">Risk & Alert Monitor</div>
+      <div class="risk-list">
+        <div class="rk-card rk-crit">
+          <div class="rk-ic">⚠</div>
+          <div class="rk-b">
+            <div class="rk-loc">Hyderabad → Kolkata Route</div>
+            <div class="rk-desc">High delay probability detected</div>
+            <div class="rk-tm">Just now</div>
+          </div>
+        </div>
+        <div class="rk-card rk-warn">
+          <div class="rk-ic">🏢</div>
+          <div class="rk-b">
+            <div class="rk-loc">Delhi Hub</div>
+            <div class="rk-desc">Warehouse congestion detected (94% cap)</div>
+            <div class="rk-tm">12m ago</div>
+          </div>
+        </div>
+        <div class="rk-card rk-warn">
+          <div class="rk-ic">📈</div>
+          <div class="rk-b">
+            <div class="rk-loc">Chennai Region</div>
+            <div class="rk-desc">Complaint spike detected (+44%)</div>
+            <div class="rk-tm">25m ago</div>
+          </div>
+        </div>
+        <div class="rk-card rk-crit">
+          <div class="rk-ic">⏱️</div>
+          <div class="rk-b">
+            <div class="rk-loc">Global Network</div>
+            <div class="rk-desc">3 shipments approaching SLA breach</div>
+            <div class="rk-tm">1h ago</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Performance Strip -->
+  <div class="cmd-perf-strip">
+    <div class="prf-item"><div class="prf-l">Average Resolution Time</div><div class="prf-v">4h 12m <span style="color:var(--s);font-size:12px">↓ 15m</span></div></div>
+    <div class="prf-item"><div class="prf-l">Customer Satisfaction Score</div><div class="prf-v">4.8 / 5.0 <span style="color:var(--s);font-size:12px">↑ 0.1</span></div></div>
+    <div class="prf-item"><div class="prf-l">SLA Compliance Rate</div><div class="prf-v">98.2% <span style="color:var(--s);font-size:12px">↑ 1.2%</span></div></div>
+    <div class="prf-item"><div class="prf-l">Complaint Volume Trend</div><div class="prf-v">245 / day <span style="color:var(--s);font-size:12px">↓ 12%</span></div></div>
+  </div>
+    </div>
+  </div>
+  `;
+}
+
+// ==================== MAP TOOLTIPS ====================
+function showMapTooltip(e,city,ships,cases,col){
+  const t=document.getElementById('map-tooltip');
+  if(!t)return;
+  const wrap=document.querySelector('.cmd-map-svg-wrap');
+  const rect=wrap.getBoundingClientRect();
+  t.innerHTML=`<div class="tt-city">${city} <div style="width:8px;height:8px;border-radius:50%;background:${col};box-shadow:0 0 6px ${col}"></div></div>
+  <div class="tt-row"><span class="tt-lbl">Tracking</span><span class="tt-val">${ships?ships+7:Math.floor(Math.random()*20+5)}</span></div>
+  <div class="tt-row"><span class="tt-lbl">Delayed</span><span class="tt-val" style="color:var(--w)">${Math.floor(Math.random()*3)}</span></div>
+  <div class="tt-row"><span class="tt-lbl">Open Cases</span><span class="tt-val" style="color:var(--d)">${cases?cases+2:Math.floor(Math.random()*4)}</span>    </div>
+  </div>
+  `;
+  t.style.left=(e.clientX-rect.left)+'px';
+  t.style.top=(e.clientY-rect.top)+'px';
+  t.classList.add('show');
+}
+function hideMapTooltip(){const t=document.getElementById('map-tooltip');if(t)t.classList.remove('show');}
+
+// ==================== SETTINGS ====================
+let settingsTab='profile';
+function renderSettings(){
+  const el=document.getElementById('page-settings');
+  el.innerHTML=`
+  <div class="page-hdr"><h1>${t('settings')}</h1><p>Manage your account, preferences, and integrations</p></div>
+  <div class="settings-layout">
+    <div>${['profile','notifications','language','team','integrations'].map(s=>`<div class="s-nav-item ${settingsTab===s?'active':''}" onclick="setSettingsTab('${s}')">${s.charAt(0).toUpperCase()+s.slice(1)}</div>`).join('')}</div>
+    <div class="card">
+      ${settingsTab==='profile'?`
+      <div style="font-size:15px;font-weight:700;margin-bottom:20px">Profile Settings</div>
+      <div style="display:flex;align-items:center;gap:16px;margin-bottom:24px;padding-bottom:20px;border-bottom:1px solid var(--bo)">
+        <div style="width:60px;height:60px;background:linear-gradient(135deg,var(--p),var(--a));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:800;color:#fff">AM</div>
+        <div><div style="font-size:16px;font-weight:700">Arjun Mehta</div><div style="font-size:13px;color:var(--t2)">Senior Support Lead &nbsp;·&nbsp; ResolveFlow AI</div></div>
+        <button style="margin-left:auto;padding:7px 14px;background:rgba(59,130,246,.1);border:1px solid rgba(59,130,246,.25);color:var(--p);border-radius:7px;font-size:12px;font-weight:600;cursor:pointer">Change Photo</button>
+      </div>
+      <div class="form-2col"><div class="form-row"><label class="form-lbl">First Name</label><input class="form-inp" value="Arjun"></div><div class="form-row"><label class="form-lbl">Last Name</label><input class="form-inp" value="Mehta"></div></div>
+      <div class="form-row"><label class="form-lbl">Email Address</label><input class="form-inp" value="arjun.mehta@resolveflow.ai"></div>
+      <div class="form-row"><label class="form-lbl">Phone</label><input class="form-inp" value="+91 97654 32100"></div>
+      <div class="form-row"><label class="form-lbl">Role</label><input class="form-inp" value="Senior Support Lead" disabled style="opacity:.6"></div>
+      <button style="padding:9px 18px;background:var(--p);color:#fff;border:none;border-radius:8px;font-weight:600;cursor:pointer;font-size:13px">Save Changes</button>`:
+      settingsTab==='notifications'?`
+      <div style="font-size:15px;font-weight:700;margin-bottom:20px">Notification Preferences</div>
+      ${[{lbl:'SLA Breach Alerts',sub:'Get notified when a case is about to breach SLA',on:true},{lbl:'New Case Assigned',sub:'When a new case is assigned to you',on:true},{lbl:'Shipment Status Changes',sub:'Real-time updates on tracked shipments',on:false},{lbl:'Daily Summary Report',sub:'Morning digest of yesterday\'s metrics',on:true},{lbl:'AI Anomaly Detections',sub:'When AI detects unusual patterns in routes',on:true}].map(n=>`<div class="notif-row"><div><div class="notif-row-lbl">${n.lbl}</div><div class="notif-row-sub">${n.sub}</div></div><label class="tog-wrap"><input type="checkbox" ${n.on?'checked':''}><div class="tog-sl"></div></label></div>`).join('')}`:
+      settingsTab==='language'?`
+      <div style="font-size:15px;font-weight:700;margin-bottom:20px">Language & Region</div>
+      <div class="form-row"><label class="form-lbl">Interface Language</label><div style="display:flex;gap:10px;margin-top:8px">${['English','Tamil'].map(l=>`<button onclick="setLangSettings('${l==='English'?'en':'ta'}')" style="padding:10px 20px;border-radius:8px;border:1px solid ${(l==='English'&&currentLang==='en')||(l==='Tamil'&&currentLang==='ta')?'var(--p)':'var(--bo)'};background:${(l==='English'&&currentLang==='en')||(l==='Tamil'&&currentLang==='ta')?'rgba(59,130,246,.12)':'transparent'};color:${(l==='English'&&currentLang==='en')||(l==='Tamil'&&currentLang==='ta')?'var(--p)':'var(--t2)'};font-size:13px;font-weight:600;cursor:pointer">${l}</button>`).join('')}</div></div>
+      <div class="form-row"><label class="form-lbl">Date Format</label><select class="form-inp"><option>DD/MM/YYYY</option><option>MM/DD/YYYY</option><option>YYYY-MM-DD</option></select></div>
+      <div class="form-row"><label class="form-lbl">Timezone</label><select class="form-inp"><option selected>Asia/Kolkata (IST +5:30)</option><option>UTC</option><option>America/New_York</option></select></div>`:
+      settingsTab==='team'?`
+      <div style="font-size:15px;font-weight:700;margin-bottom:20px">Team Management</div>
+      <table class="tbl">
+        <thead><tr><th>Name</th><th>Role</th><th>Cases</th><th>CSAT</th><th>Status</th></tr></thead>
+        <tbody>${agents.map(a=>`<tr><td><div style="display:flex;align-items:center;gap:8px"><div style="width:26px;height:26px;border-radius:50%;background:${a.color};display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff">${a.initials}</div>${a.name}</div></td><td style="font-size:12.5px;color:var(--t2)">Support Agent</td><td style="font-weight:600">${a.resolved}</td><td style="color:${a.csat>=4.5?'var(--s)':a.csat>=4?'var(--w)':'var(--d)'}">${a.csat} \u2605</td><td><span class="badge b-s">Active</span></td></tr>`).join('')}</tbody>
+      </table>`:
+      `<div style="font-size:15px;font-weight:700;margin-bottom:20px">Integrations</div>
+      ${[{name:'WhatsApp Business API',desc:'Route WhatsApp messages to inbox',on:true,color:'#22C55E'},{name:'Gmail / Google Workspace',desc:'Email integration with threading',on:true,color:'#3B82F6'},{name:'Twilio Voice',desc:'Voice call routing and recording',on:false,color:'#EF4444'},{name:'Shipment Tracking API',desc:'Live tracking data from logistics partners',on:true,color:'#8B5CF6'},{name:'Slack Notifications',desc:'Push SLA alerts to Slack channels',on:false,color:'#F59E0B'}].map(i=>`<div style="display:flex;align-items:center;gap:12px;padding:14px 0;border-bottom:1px solid rgba(255,255,255,.04)"><div style="width:36px;height:36px;border-radius:8px;background:rgba(255,255,255,.06);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;color:${i.color}">\u25CF</div><div style="flex:1"><div style="font-size:13px;font-weight:600">${i.name}</div><div style="font-size:12px;color:var(--t2);margin-top:2px">${i.desc}</div></div><label class="tog-wrap"><input type="checkbox" ${i.on?'checked':''}><div class="tog-sl"></div></label></div>`).join('')}`}
+    </div>
+      </div>
+  </div>
+  `;
+}
+
+function setSettingsTab(tab){settingsTab=tab;renderSettings();}
+function setLangSettings(lang){currentLang=lang;buildNav();document.getElementById('lang-toggle').textContent=lang.toUpperCase();renderSettings();}
+
+// ==================== UTILITY FUNCTIONS ====================
+function toggleSidebar(){
+  const sb=document.getElementById('sidebar');
+  const lbl=document.getElementById('sb-toggle-lbl');
+  sidebarCollapsed=!sidebarCollapsed;
+  sb.classList.toggle('collapsed',sidebarCollapsed);
+  if(lbl) lbl.textContent=sidebarCollapsed?'Expand':t('collapse');
+}
+
+function toggleLang(){
+  currentLang=currentLang==='en'?'ta':'en';
+  document.getElementById('lang-toggle').textContent=currentLang.toUpperCase();
+  buildNav();
+  if(currentPage) renderPage(currentPage);
+}
+
+function handleSearch(q){
+  const drop=document.getElementById('search-results');
+  if(!q.trim()){
+    drop.classList.remove('open');
+    return;
+  }
+  const qLow=q.toLowerCase();
+  const cRes=cases.filter(c=>(c.id+c.customer+c.trackingId+c.issue).toLowerCase().includes(qLow)).map(c=>`<div class="sr-item" onclick="navFromSearch('cases','${c.id}')"><div class="sr-title" style="color:var(--p)">${c.id} · ${c.customer}</div><div class="sr-desc">${c.issue}</div></div>`);
+  const sRes=shipments.filter(s=>(s.id+s.customer+s.location).toLowerCase().includes(qLow)).map(s=>`<div class="sr-item" onclick="navFromSearch('shipments','${s.id}')"><div class="sr-title" style="color:var(--s)">${s.id} · ${s.customer}</div><div class="sr-desc">${s.status} at ${s.location}</div></div>`);
+  const allRes=[...cRes,...sRes];
+  if(allRes.length===0){
+    drop.innerHTML=`<div class="sr-item" style="cursor:default;color:var(--t2);text-align:center">No results found for "${q}"    </div>
+  </div>
+  `;
+  }else{
+    drop.innerHTML=allRes.join('');
+  }
+  drop.classList.add('open');
+}
+
+function navFromSearch(page,id){
+  navigateTo(page);
+  document.getElementById('globalSearch').value='';
+  document.getElementById('search-results').classList.remove('open');
+  if(page==='cases'){
+    setTimeout(()=>openCaseDetail(id), 100);
+  } else if (page==='shipments') {
+    // Optionally focus or filter the shipment row
+  }
+}
+
+function buildNotifDropdown(){
+  const d=document.getElementById('notif-drop');
+  d.innerHTML=`<div class="nd-hdr"><span>${t('notifications')}</span><span style="font-size:11px;color:var(--p);cursor:pointer" onclick="document.querySelector('.nb-badge').classList.remove('has-notifs')">Mark all read</span></div>${liveAlerts.slice(0,5).map(a=>`<div class="nd-item"><div class="nd-dot" style="background:${a.type==='danger'?'var(--d)':a.type==='warning'?'var(--w)':'var(--s)'}"></div><div><div class="nd-txt">${a.title}</div><div class="nd-txt" style="color:var(--t2)">${a.desc}</div><div class="nd-time">${a.time}</div></div></div>`).join('')}`;
+  
+  const badge=document.querySelector('.nb-badge');
+  if(badge && liveAlerts.length>0){
+    badge.textContent=liveAlerts.length;
+    badge.classList.add('has-notifs');
+  }
+}
+
+function toggleNotif(e){
+  notifOpen=!notifOpen;
+  document.getElementById('notif-drop').classList.toggle('open',notifOpen);
+}
+
+document.addEventListener('click',e=>{
+  if(!e.target.closest('#notif-btn')&&!e.target.closest('#notif-drop')){
+    notifOpen=false;
+    const d=document.getElementById('notif-drop');
+    if(d) d.classList.remove('open');
+  }
+  if(!e.target.closest('#nb-search-wrap')){
+    const sd=document.getElementById('search-results');
+    if(sd) sd.classList.remove('open');
+  }
+});
+
+// ==================== REAL-TIME SIMULATION ====================
+const newComplaints=[
+  {customer:'Aditya Nair',company:'SpeedLink Cargo',issue:'Package missing from delivery',channel:'whatsapp',sla:'urgent',color:'#F97316',initials:'AN'},
+  {customer:'Rekha Srinivas',company:'Coastal Freight',issue:'Shipment shows wrong location',channel:'email',sla:'medium',color:'#8B5CF6',initials:'RS'},
+  {customer:'Manoj Kumar',company:'Apex Logistics',issue:'Damaged fragile item',channel:'chat',sla:'urgent',color:'#EF4444',initials:'MK'}
+];
+let newComplaintIdx=0;
+
+function startRealtime(){
+  // Push new complaint every 35 seconds
+  setInterval(()=>{
+    const nc=newComplaints[newComplaintIdx%newComplaints.length];
+    newComplaintIdx++;
+    const newCase={id:`CS-${1057+newComplaintIdx}`,customer:nc.customer,company:nc.company,issue:nc.issue,channel:nc.channel,priority:'high',status:'Open',agent:'Priya Sharma',trackingId:`RF-${4600+newComplaintIdx}`,sla:'2h',created:'Just now',slaDue:Date.now()+7200000};
+    cases.unshift(newCase);
+    const newConv={id:100+newComplaintIdx,caseId:newCase.id,customer:nc.customer,initials:nc.initials,channel:nc.channel,lastMsg:nc.issue,time:'Just now',unread:1,sla:nc.sla,color:nc.color,messages:[{role:'customer',text:nc.issue,time:new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}]};
+    conversations.unshift(newConv);
+    const alertEntry={type:'primary',title:'New Complaint Received',desc:`${newCase.id} — ${nc.customer}, ${nc.issue}`,time:'Just now'};
+    liveAlerts.unshift(alertEntry);
+    if(liveAlerts.length>12) liveAlerts.pop();
+    // Update live alerts feed if on dashboard
+    if(currentPage==='dashboard') renderAlertFeed();
+    if(currentPage==='inbox') renderInbox();
+    if(currentPage==='command') renderCommand();
+    // Update notification badge
+    const badge=document.querySelector('.nb-badge');
+    if(badge){
+      badge.textContent=liveAlerts.length;
+      badge.classList.add('has-notifs');
+      badge.style.animation='none';
+      setTimeout(()=>badge.style.animation='pulseGlow 0.5s ease',10);
+    }
+    buildNav(); // refresh inbox sidebar badge
+  },35000);
+  // Update shipment statuses every 60s
+  setInterval(()=>{
+    const s=shipments[Math.floor(Math.random()*shipments.length)];
+    if(s.status==='Processing') s.status='In Transit';
+    else if(s.status==='In Transit'&&Math.random()>0.7) s.status='Out for Delivery';
+    if(currentPage==='shipments') renderShipments();
+  },60000);
+}
+
+// ==================== CHATBOT ====================
+function initChatbot(){
+  const msgsEl=document.getElementById('cb-msgs');
+  if(!msgsEl) return;
+  msgsEl.innerHTML='';
+  appendBotMsg('Hi! I am the ResolveFlow AI assistant. I can help you check shipment status, look up case details, or answer logistics FAQs. What would you like to know?');
+}
+
+function toggleChatbot(){
+  cbOpen=!cbOpen;
+  document.getElementById('cb-panel').classList.toggle('open',cbOpen);
+  if(cbOpen&&!document.querySelector('.bot-msg')) initChatbot();
+}
+
+function appendBotMsg(text){
+  const c=document.getElementById('cb-msgs');
+  if(!c) return;
+  const d=document.createElement('div');
+  d.className='bot-msg';
+  d.textContent=text;
+  c.appendChild(d);
+  c.scrollTop=c.scrollHeight;
+}
+
+function appendUserMsg(text){
+  const c=document.getElementById('cb-msgs');
+  if(!c) return;
+  const d=document.createElement('div');
+  d.className='user-msg';
+  d.textContent=text;
+  c.appendChild(d);
+  c.scrollTop=c.scrollHeight;
+}
+
+function showTyping(){
+  const c=document.getElementById('cb-msgs');
+  if(!c) return;
+  const d=document.createElement('div');
+  d.className='typing-ind';
+  d.id='typing-ind';
+  d.innerHTML='<div class="ty-dot"></div><div class="ty-dot"></div><div class="ty-dot"></div>';
+  c.appendChild(d);
+  c.scrollTop=c.scrollHeight;
+}
+
+function hideTyping(){
+  const t=document.getElementById('typing-ind');
+  if(t) t.remove();
+}
+
+function getBotResponse(msg){
+  const q=msg.toLowerCase();
+  // Shipment query
+  const rfMatch=msg.match(/RF-?\d+/i);
+  if(rfMatch){
+    const id=rfMatch[0].toUpperCase().replace('RF','RF-').replace('RF--','RF-');
+    const ship=shipments.find(s=>s.id.toLowerCase()===id.toLowerCase()||s.id.replace('-','').toLowerCase()===id.replace('-','').toLowerCase());
+    if(ship) return `Shipment ${ship.id} is currently ${ship.status} at ${ship.location}. Route: ${ship.route}. Estimated delivery: ${ship.eta}. Weight: ${ship.weight}kg.`;
+  }
+  // Case query
+  const csMatch=msg.match(/CS-?\d+/i);
+  if(csMatch){
+    const id=csMatch[0].toUpperCase().replace('CS','CS-').replace('CS--','CS-');
+    const c=cases.find(cs=>cs.id.toLowerCase()===id.toLowerCase());
+    if(c) return `Case ${c.id} is currently ${c.status}. Assigned to ${c.agent}. Issue: ${c.issue}. Priority: ${c.priority}. SLA: ${fmtSla(c.slaDue)} remaining.`;
+  }
+  // Create case
+  if(q.includes('create case')||q.includes('new case')||q.includes('file complaint')||q.includes('create complaint')){
+    const newId=`CS-${1060+Math.floor(Math.random()*100)}`;
+    cases.unshift({id:newId,customer:'Chatbot User',company:'Retail',issue:'Damage claim via Chatbot',channel:'chat',priority:'high',status:'Open',agent:'Unassigned',trackingId:'—',sla:'2h',created:'Just now',slaDue:Date.now()+7200000});
+    if(currentPage==='cases') renderCases();
+    return `I have created a new case for you. Case ID: ${newId}. Our support team will review the claim shortly.`;
+  }
+  // Delay reasons
+  if(q.includes('delay')||q.includes('late')||q.includes('delayed'))
+    return 'Common causes of delays include highway checkpoints on NH-44 and NH-48, monsoon disruptions, vehicle breakdowns at redistribution hubs, and customs holds. Currently, the Chennai \u2192 Bangalore route has the highest delay rate at 34%.';
+  // Damage claims
+  if(q.includes('damage')||q.includes('broken')||q.includes('claim'))
+    return 'To file a damage claim: 1) Document the damage with photos 2) Note the tracking ID and case ID 3) Submit via the Cases page with type: Damage. Compensation is typically processed within 5-7 business days for verified claims.';
+  // Agent suggestion
+  if(q.includes('reply')||q.includes('response')||q.includes('suggest'))
+    return 'Go to the Inbox page and open the relevant conversation. The right panel shows an AI-generated suggested reply based on the shipment context. Click "Use This Reply" to populate the message box.';
+  // Stats
+  if(q.includes('stat')||q.includes('metric')||q.includes('how many'))
+    return `Current stats: ${cases.filter(c=>c.status!=='Resolved').length} open cases, ${shipments.filter(s=>s.status==='In Transit').length} shipments in transit, ${shipments.filter(s=>s.status==='Delayed').length} delayed shipments, CSAT: 4.3 stars.`;
+  // Greeting
+  if(q.includes('hi')||q.includes('hello')||q.includes('hey'))
+    return 'Hello! I can help you with shipment tracking (try "RF-2847"), case lookup (try "CS-1042"), or answer logistics questions. What do you need?';
+  return 'I can help with: shipment status (type a tracking ID like RF-2847), case details (type CS-1042), creating cases, delay reasons, damage claims, or suggest agent replies. What would you like?';
+}
+
+function sendChatMsg(){
+  const inp=document.getElementById('cb-inp');
+  if(!inp||!inp.value.trim()) return;
+  const msg=inp.value.trim();
+  inp.value='';
+  appendUserMsg(msg);
+  showTyping();
+  const delay=800+Math.random()*700;
+  setTimeout(()=>{
+    hideTyping();
+    appendBotMsg(getBotResponse(msg));
+  },delay);
+}
+
+// ==================== INIT ====================
+document.addEventListener('DOMContentLoaded',()=>{
+  renderLanding();
+  buildNav();
+});
+
+// ==================== NEW CASE MODAL ====================
+function openNewCaseModal(){
+  document.getElementById('new-case-mod').classList.add('open');
+  document.getElementById('nc-cust').value='';
+  document.getElementById('nc-ship').value='';
+  document.getElementById('nc-type').value='Issue';
+  document.getElementById('nc-issue').value='';
+  document.getElementById('nc-prio').value='medium';
+  document.getElementById('nc-chan').value='email';
+  document.getElementById('nc-agent').value='Unassigned';
+  document.getElementById('nc-sla').value='24h';
+}
+function closeNewCaseModal(){
+  document.getElementById('new-case-mod').classList.remove('open');
+}
+function submitNewCase(){
+  const cust=document.getElementById('nc-cust').value.trim()||'Unknown Customer';
+  const ship=document.getElementById('nc-ship').value.trim()||'—';
+  const type=document.getElementById('nc-type').value;
+  let issue=document.getElementById('nc-issue').value.trim()||'No details provided';
+  if (type !== 'Issue') issue = `[${type}] ` + issue;
+  
+  const prio=document.getElementById('nc-prio').value;
+  const chan=document.getElementById('nc-chan').value;
+  const agent=document.getElementById('nc-agent').value;
+  const slaText=document.getElementById('nc-sla').value;
+  const slaDueMs = slaText==='1h'?3600000 : slaText==='4h'?14400000 : slaText==='8h'?28800000 : 86400000;
+  
+  const newId=`CS-${1060+Math.floor(Math.random()*200)}`;
+  cases.unshift({
+    id:newId, customer:cust, company:'External', issue:issue, channel:chan, priority:prio, status:'Open', agent:agent, trackingId:ship, sla:slaText, created:'Just now', slaDue:Date.now()+slaDueMs
+  });
+  closeNewCaseModal();
+  if(currentPage==='cases'){ renderCases(); }
+  else{ navigateTo('cases'); }
+  alert('Case '+newId+' created successfully!');
+}
+
+</script>
+</body>
+</html>
